@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>联系我们</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+  <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+<style>
+    .bg{
+      position:absolute;
+      top:0;
+      left: 0;
+      width:100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.9;
+    }
+    </style>
+<body>
+    {% load static %}
+    <img src="{% static '/app/image/bg.png' %}" class="bg"/>
+    <div class="container" style="padding-left: 10vw;padding-top: 8vh;">
+    <div>
+        <div>
+            <img src="{% static '/app/image/twitter.png' %}" style="margin-right: 5px;"/>
+            <text>Twitter</text>
+        </div>
+        <div style="margin-left: 37px;"><a href="https://twitter.com/Brick_Bsc" style="color: black;font-size: 25px;">@Brick_BSC</a></div>
+    </div>
+    <div style="padding-top: 5vh;">
+        <div>
+            <img src="{% static '/app/image/email.png' %}" style="margin-right: 5px;"/>
+            <text>E-mail</text>
+        </div>
+        <div style="margin-left: 37px;"><a href="mailto:Brick_BSC@outlook.com" style="color: black;font-size: 25px;">Brick_BSC@outlook.com</a></div>
+    </div>
+    <div style="padding-top: 5vh;">
+        <div>
+            <img src="{% static '/app/image/telegram-plane.png' %}" style="margin-right: 5px;"/>
+            <text>Telegram Group</text>
+        </div>
+        <div style="margin-left: 37px;"><a href="https://t.me/brickcn" style="color: black;font-size: 25px;">@Brickcn</a></div>
+    </div>
+    <div style="padding-top: 5vh;">
+        <div>
+            <img src="{% static '/app/image/man.png' %}" style="margin-right: 5px;"/>
+            <text>Telegram personal</text>
+        </div>
+        <div style="margin-left: 37px;"><a href="https://t.me/Gon9tou" style="color: black;font-size: 25px;">@Gon9tou</a></div>
+    </div>
+
+
+
+    </div>
+
+    <div style="height: 25vh;"></div>
+
+    <div style="text-align: center;">
+        <div class="row" style="width: 80vw;margin:0 auto;">
+          <a href="{% url 'connectUs' %}" class="col">
+            <img src="{% static '/app/image/connectL.png' %}"/>
+            <text style="color: black;">联系工棚</text>
+          </a>
+          <a class="col">
+            <img src="{% static '/app/image/walletL.png' %}"/>
+            <text style="color: black;">链接钱包</text>
+          </a>
+        </div>
+      
+      </div>
+</body>
+</html>

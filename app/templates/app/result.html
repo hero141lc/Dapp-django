@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>快来查看你的土狗账单~</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+  <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+{% load static %} 
+<style>
+
+  .bg{
+    position:absolute;
+    top:0;
+    left: 0;
+    width:100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.9;
+  }
+  .success{
+    background: url("{% static '/app/image/success.png' %}"),no-repeat;
+    background-size: cover;
+    background-size: 100%,100%;
+    width: 100vw;
+    height: 20rem;
+    background-repeat:no-repeat;
+  }
+  .fail{
+    background: url("{% static '/app/image/fail.png' %}"),no-repeat;
+    background-size: cover;
+    background-size: 100%,100%;
+    width: 100vw;
+    height: 35rem;
+    background-repeat:no-repeat;
+  }
+  .lastMsg{
+    background: url("{% static '/app/image/3.png' %}"),no-repeat;
+    background-size: cover;
+    background-size: 100%,100%;
+    width: 100vw;
+    height: 30rem;
+    background-repeat:no-repeat;
+  }
+  </style>
+<body>
+      
+    <img src="{% static '/app/image/bg3.png' %}" class="bg"/>
+    <div style="height: 10vh;"></div>
+    {% if winne %}
+    <div class="success">
+      
+      <div style="padding: 15%;font-size: 1.2rem;" >
+        <text>在过去的<b style="font-size: 1.5rem;">{{month}}</b>月里</text>
+        <div style="height: 0.5rem;"></div>
+        <text>你在BSC共进行了<b style="font-size: 1.5rem;">{{times}}</b>笔交易</text>
+        <div style="height: 0.5rem;"></div>
+        <text>总共盈利<b style="font-size: 1.5rem;">{{profits}}</b></text>
+        <div style="height: 0.5rem;"></div>
+       <!-- <text>超越了<b style="font-size: 1.5rem;">6{{month}}%</b>散户</text>
+        <div style="height: 0.5rem;"></div>-->
+        <text>相当于搬砖<b style="font-size: 1.5rem;">{{brickDays}}%</b>天</text>
+     
+      </div>
+    </div>
+    <img src="{% static '/app/image/2.png' %}" style="width: 100%;height:15rem;" />
+    {% else %}
+    <div class="fail">
+      
+      <div style="padding: 15%;font-size: 1.2rem;" >
+        <text>在过去的<b style="font-size: 1.5rem;">{{month}}</b>月里</text>
+        <div style="height: 0.5rem;"></div>
+        <text>你在BSC共进行了<b style="font-size: 1.5rem;">{{times}}</b>笔交易</text>
+        <div style="height: 0.5rem;"></div>
+        <text>总记亏损<b style="font-size: 1.5rem;">{{profits}}$</b></text>
+        <div style="height: 0.5rem;"></div>
+       <!-- <text>超越了<b style="font-size: 1.5rem;">6{{month}}%</b>散户</text>
+        <div style="height: 0.5rem;"></div>-->
+        <text>相当于白搬了<b style="font-size: 1.5rem;">{{brickDays}}</b>天砖</text>
+        <div style="height: 0.5rem;"></div>
+        <text>其中你最亏的一笔是<b style="font-size: 1.5rem;">{{profitsMin}}$</b></text>
+        <div style="height: 0.5rem;"></div>
+        <text>因为你买了<b style="font-size: 1.5rem;">{{minName}}</b></text>
+        <div style="height: 0.5rem;"></div>
+        <text>但你依然有赚的<b style="font-size: 1.5rem;"></b></text>
+        <div style="height: 0.5rem;"></div>
+        <text>你最赚的一笔是<b style="font-size: 1.5rem;">{{profitsMax}}$</b></text>
+        <div style="height: 0.5rem;"></div>
+        <text>因为你买了<b style="font-size: 1.5rem;">{{maxName}}</b></text>
+        <div style="height: 0.5rem;"></div>
+        <text>想想是谁让你买的，这人能处<b style="font-size: 1.5rem;"></b></text>
+      </div>
+    </div>
+    <img src="{% static '/app/image/fail3.png' %}" style="width: 100%;height:15rem;" />
+    {% endif %}
+    
+    <div class="lastMsg">
+      
+      <div style="padding-left: 15%;padding-top:10%;font-size: 1.2rem;" >
+        <text>你累计冲了<b style="font-size: 1.5rem;">待定</b>个貔貅</text>
+        <div style="height: 0.5rem;"></div>
+        <text>其中<b style="font-size: 1.5rem;">待定{{month}}</b>项目让你直接腰斩</text>
+        <div style="height: 0.5rem;"></div>
+        <text>更让人拍断腿的是</text>
+        <div style="height: 0.5rem;"></div>
+        <text>你卖飞了<b style="font-size: 1.5rem;">{{maifeiWho}}</b></text>
+        <div style="height: 0.5rem;"></div>
+        <text>收益为<b style="font-size: 1.5rem;">{{profitsMax}}$</b></text>
+        <div style="height: 0.5rem;"></div>
+        <text>在卖出后它直接暴涨，你因此少赚了<br><b style="font-size: 1.5rem;">{{maifei}}$</b></text>
+        <div style="height: 0.5rem;"></div>
+        <text>工头挺同情你的</text>
+     
+      </div>
+    </div>
+    <div style="height: 10vh;"></div>
+    <div style="text-align:center">
+      <form action="{% url 'create' %}" method="get">
+    <button type="submit" value="Submit" type="button" class="btn btn-danger btn-lg " style="width: 70vw;background: #ED656A;box-shadow: inset 1px 2px 2px 0 rgba(255,255,255,0.39);border-radius: 49.5px;">点击生成专属海报</button>
+  </form>
+  </div>
+</body>
+</html>

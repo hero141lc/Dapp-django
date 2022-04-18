@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>快来查看你的土狗账单~</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+{% load static %}
+<style>
+    .bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        opacity: 0.9;
+    }
+
+    .head2 {
+        display: flex;
+        margin: 0 auto;
+        width: 90vw;
+    
+        background: #FFFFFF;
+        border-radius: 32px;
+    }
+
+    .fadeButton {
+        width: 35vw;
+        border: 2px solid #ED656A;
+        border-radius: 50px;
+    }
+
+    .rButton {
+        width: 35vw;
+        background: #ED656A;
+        border-radius: 50px;
+    }
+</style>
+
+<body>
+
+    <img src="{% static '/app/image/bg3.png' %}" class="bg" />
+    <div style="height: 10vh;"></div>
+    <div class="head2">
+        
+        <div class="container">
+            <div style="height: 3vh;"></div>
+            <div class="row">
+                <div class="col-4">
+
+                </div>
+                <div class="col-8">
+                    <div style="text-align: center;vertical-align: middle;">
+                        <img style="width: 8rem;height: 8rem;" src="{% static '/app/image/07.png' %}">
+                        <br>
+                        <text>工头已为你生成专属海报</text>
+                    </div>
+                </div>
+            </div>
+            <div style="height: 5vh;"></div>
+            <div style="text-align: center;">
+                <button class="btn btn-lg fadeButton">保存本地</button>
+                <button class="btn btn-lg rButton" style="margin-left: 1rem; color: white;">分享链接</button>
+            </div>
+            <div style="height: 5vh;"></div>
+            <div class="row">
+                <div class="col-4">
+               
+                    <div style=" text-align: center;margin: auto;padding-top: 1rem">
+                    <text style="font-size: 2.5rem;color: red;">23.22</text>
+                    <br>
+                    <text style="font-size: 1rem;color: gray;">现价</text>
+              
+                </div>
+                </div>
+                <div class="col-8">
+                    <div style="vertical-align: middle;line-height:2rem">
+                        <text style="font-size: 1rem;color: gray;">市&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;值：<span style="color: black;">23.22亿</span></text>
+                        <br>
+                        <text style="font-size: 1rem;color: gray;">底&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;池：<span style="color: black;">23.22亿</span></text>
+                        <br>
+                        <text style="font-size: 1rem;color: gray;">持币地址数量：<span style="color: black;">344324235</span></text>
+                        <br>
+                        <text style="font-size: 1rem;color: gray;">当日交易次数：<span style="color: black;">3423545435</span></text>
+                    </div>
+                </div>
+            </div>
+            <div style="height: 5vh;"></div>
+            <div></div>
+            <div style="height: 5vh;"></div>
+            <div>
+                <text style="color: gray;">偷偷告诉你，Brick是meme，当你能看到这段话时，证明Brick已经成功创造了热点，接下来你懂的</text>
+            </div>
+            <div style="height: 5vh;"></div>
+        </div>
+    </div>
+<div>
+    <a href="https://pancakeswap.finance/swap?outputCurrency=0xc4893fea8547fb1a4d860518285af6655424645f">
+        <div style="text-align:center">
+            <button type="submit" value="Submit" type="button" class="btn btn-danger btn-lg "
+                style="width: 70vw;background: #ED656A;box-shadow: inset 1px 2px 2px 0 rgba(255,255,255,0.39);border-radius: 49.5px;">去薄饼购买</button>
+        </div>
+    </a>
+</div>
+    <div style="height: 5vh;"></div>
+    <div style="text-align: center;">
+        <div class="row" style="width: 80vw;margin:0 auto;">
+            <a href="{% url 'connectUs' %}" class="col">
+                <img src="{% static '/app/image/connectL.png' %}" />
+                <text style="color: black;">联系工棚</text>
+            </a>
+            <a class="col">
+                <img src="{% static '/app/image/walletL.png' %}" />
+                <text style="color: black;">链接钱包</text>
+            </a>
+        </div>
+        <div style="height: 3vh;"></div>
+        <text style="color: gray;">brick工棚科技</text>
+    </div>
+</body>
+
+</html>
