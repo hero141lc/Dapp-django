@@ -68,7 +68,7 @@ async def exSql(contenst):
     timeNow=datetime.datetime.now()
     toDate=timeNow.date().isoformat()
     try:
-        tokenOb=Token.objects.get(contenst)
+        tokenOb=Token.objects.get(address=contenst)
         tokenObTime=tokenOb.update_at.date()
         if tokenObTime.__rsub__(timeNow)>1:
             tokenObTime=tokenObTime+ datetime.timedelta(1)
