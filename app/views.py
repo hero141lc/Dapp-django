@@ -17,7 +17,8 @@ def index(request):
 def connectUs(request):
 
     return render(request, 'app/connectUs.html')
-
+async def dd():
+    print("ss") 
 def Kline(contenst):
     peak = 0
     URL = 'https://api.covalenthq.com/v1/56/address/'+contenst+'/portfolio_v2/?quote-currency=USD&format=JSON&key=ckey_c95724e05a2f4802a387160b08e'
