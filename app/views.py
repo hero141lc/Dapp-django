@@ -20,7 +20,7 @@ def connectUs(request):
 
 def Kline(contenst):
     peak = 0
-    URL = 'https://api.covalenthq.com/v1/56/address/'+contenst+'/portfolio_v2/?quote-currency=USD&format=JSON&key=ckey_docs'
+    URL = 'https://api.covalenthq.com/v1/56/address/'+contenst+'/portfolio_v2/?quote-currency=USD&format=JSON&key=ckey_c95724e05a2f4802a387160b08e'
     # 输入在浏览器的网址
     res = requests.get(URL).text
     # 发送 GET 方式的请求，并把返回的结果(响应)存储在 res 变量里头
@@ -47,7 +47,7 @@ def Kline(contenst):
 def result(request):
     address=request.GET['address']
     print(request.GET['address'])
-    URL = 'https://api.covalenthq.com/v1/56/address/'+address+'/transactions_v2/?quote-currency=USD&format=JSON&block-signed-at-asc=false&no-logs=false&page-number=0&page-size=1000&key=ckey_docs'
+    URL = 'https://api.covalenthq.com/v1/56/address/'+address+'/transactions_v2/?quote-currency=USD&format=JSON&block-signed-at-asc=false&no-logs=false&page-number=0&page-size=1000&key=ckey_c95724e05a2f4802a387160b08e'
     # 输入在浏览器的网址
     res = requests.get(URL).text
     # 发送 GET 方式的请求，并把返回的结果(响应)存储在 res 变量里头
