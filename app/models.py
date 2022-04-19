@@ -7,7 +7,7 @@ class Token(models.Model):
     contract_name = models.CharField(max_length=50,null=True, blank=True)
     contract_ticker_symbol = models.CharField(max_length=10,null=True, blank=True)
     logo_url = models.CharField(max_length=150,null=True, blank=True)
-    contract_address = models.CharField(max_length=50,unique=True)
+    contract_address = models.CharField(max_length=50,unique=True,primary_key=True)
     update_at = models.DateTimeField(default = timezone.now)
     quote_currency = models.CharField(max_length=20,null=True, blank=True)
     pub_date = models.DateTimeField('date published',auto_now = True)
