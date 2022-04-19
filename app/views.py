@@ -8,11 +8,13 @@ import datetime
 from dateutil import rrule,parser
 from rx import catch
 from sqlalchemy import false, true
-
+from .models import Token,Prices
+# Diy Function
+from app.getToken import *
 # Create your views here.
 pancakeAddr='0x10ed43c718714eb63d5aa57b78b54704e256024e'
 def index(request):
-
+    print(exSql('0x7a565284572d03ec50c35396f7d6001252eb43b6'))
     return render(request, 'app/index.html')
 def connectUs(request):
 

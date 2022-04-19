@@ -1,5 +1,3 @@
-import datetime
-
-timeNow=datetime.datetime.now()
-toDate=timeNow.date().isoformat()
-print(toDate)
+from web3 import Web3, EthereumTesterProvider
+w3 = Web3(EthereumTesterProvider())
+w3.isConnected()

@@ -1,12 +1,19 @@
-import requests
-import json
+'''
+
 import datetime
 import django
-django.setup()
+#django.setup()
 
 #from app.models.user import User
-from .models import Token,Prices
 
+'''
+import json
+import requests
+import datetime
+from .models import Token,Prices
+def test():
+    print('sauhuiuadhiwaudh')
+    return 0
 def is_today(target_date):
     """
     Detects if the date is current date
@@ -41,31 +48,33 @@ goma0xab14952d2902343fde7c65d7dc095e5c8be86920
 bnx0x8c851d1a123ff703bd1f9dabe631b69902df5f97
 bit0xc864019047b864b6ab609a968ae2725dfaee808a
 '''
-async def newData(contenst,yearsAgo,toDate):
+def newData(contenst,yearsAgo,toDate):
     #fromDate = '2022-03-14'
     #toDate = '2022-04-15'
     URL = 'https://api.covalenthq.com/v1/pricing/historical_by_addresses_v2/56/USD/'+contenst+'/?from='+yearsAgo+'&to='+toDate+'&prices-at-asc=true&page-size=1000&key=ckey_c95724e05a2f4802a387160b08e'
     # 输入在浏览器的网址
-    res = await requests.get(URL).text
+    res = requests.get(URL).text
     data=json.loads(res)['data'][0]
     priceList = data['prices']
-    tokenOb= await Prices.objects.create(decimals=data['contract_decimals'],name=data['contract_name'],symbol=data['contract_ticker_symbol'],logo_url=data['logo_url'],address=data['contract_address'],update_at=datetime.datetime(data['update_at']),quote_currency=data['quote_currency'])
+    print()
+    tokenOb= Token.objects.create(decimals=int(data['contract_decimals']),name=data['contract_name'],symbol=data['contract_ticker_symbol'],logo_url=data['logo_url'],address=data['contract_address'],update_at=datetime.datetime.strptime(data['update_at'][0:11], "%Y-%m-%dT"),quote_currency=data['quote_currency'])
     for item in priceList:
-        Prices.objects.create(date=datetime.date(item['date']),price=item['price'], productline=tokenOb)
+        print()
+        Prices.objects.create(date=datetime.datetime.strptime(item['date'][0:10], "%Y-%m-%d"),price=item['price'], Token=tokenOb)
     print('New Coin Added Successed:',data['contract_ticker_symbol'],data['update_at'])
     return 0
-async def getData(tokenOb,fromDate,toDate):
+def getData(tokenOb,fromDate,toDate):
     #fromDate = '2022-03-14'
     #toDate = '2022-04-15'
     URL = 'https://api.covalenthq.com/v1/pricing/historical_by_addresses_v2/56/USD/'+tokenOb.address+'/?from='+fromDate+'&to='+toDate+'&prices-at-asc=true&page-size=1000&key=ckey_c95724e05a2f4802a387160b08e'
     # 输入在浏览器的网址
-    res = await requests.get(URL).text
+    res = requests.get(URL).text
     data=json.loads(res)['data'][0]['prices']
     for item in data:
-        Prices.objects.create(date=datetime.date(item['date']),price=item['price'], productline=tokenOb)
+        Prices.objects.create(date=datetime.datetime.strptime(item['date'][0:10], "%Y-%m-%d"),price=item['price'], Token=tokenOb)
     return 0
 
-async def exSql(contenst):
+def exSql(contenst):
     timeNow=datetime.datetime.now()
     toDate=timeNow.date().isoformat()
     try:
@@ -75,11 +84,13 @@ async def exSql(contenst):
             tokenObTime=tokenObTime+ datetime.timedelta(1)
             fromDate=tokenObTime.isoformat()
             data=getData(tokenOb,fromDate,toDate)
+
         else:
             return 0
     except:
-        yearsAgo=(timeNow-datetime.timedelta(years=1)).date().isoformat()
-        newData(contenst,yearsAgo,toDate)
+        yearsAgo=(timeNow-datetime.timedelta(days=365)).date().isoformat()
+        data=newData(contenst,yearsAgo,toDate)
+
     # 发送 GET 方式的请求，并把返回的结果(响应)存储在 res 变量里头
     # 答第二个问题，get() 方法需要输入一个网页链接
-    return 0
+    return data
