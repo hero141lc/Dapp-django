@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'app.apps.AppConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -73,20 +74,20 @@ WSGI_APPLICATION = 'brickDapp.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-'''DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}'''
+#'''DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#    }
+#}'''
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # 数据库引擎
-        'NAME': 'klinedata', # 数据库名
-        'USER': 'kLineData', # 账号
-        'PASSWORD': 'bKEniWziiNPb7TwE', # 密码
-        'HOST': 'sql.brickcn.xyz', # HOST
+        'NAME': 'tocken_price', # 数据库名
+        'USER': 'Tocken_Price', # 账号
+        'PASSWORD': 'yBYDcapFTd8faZ62', # 密码
+        'HOST': '209.141.51.211', # HOST
         'POST': 3306, # 端口
 
     }
