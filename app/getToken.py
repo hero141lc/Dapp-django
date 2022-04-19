@@ -52,6 +52,7 @@ async def newData(contenst,yearsAgo,toDate):
     tokenOb= await Prices.objects.create(decimals=data['contract_decimals'],name=data['contract_name'],symbol=data['contract_ticker_symbol'],logo_url=data['logo_url'],address=data['contract_address'],update_at=datetime.datetime(data['update_at']),quote_currency=data['quote_currency'])
     for item in priceList:
         Prices.objects.create(date=datetime.date(item['date']),price=item['price'], productline=tokenOb)
+    print('New Coin Added Successed:',data['contract_ticker_symbol'],data['update_at'])
     return 0
 async def getData(tokenOb,fromDate,toDate):
     #fromDate = '2022-03-14'
@@ -81,4 +82,4 @@ async def exSql(contenst):
         newData(contenst,yearsAgo,toDate)
     # 发送 GET 方式的请求，并把返回的结果(响应)存储在 res 变量里头
     # 答第二个问题，get() 方法需要输入一个网页链接
-    print(res)
+    return 0
