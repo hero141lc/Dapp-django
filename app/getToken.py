@@ -10,7 +10,9 @@ import django
 import json
 import requests
 import datetime
-from .models import Token,Prices
+from .models import Token,Prices,Trans,Wallet
+
+pancakeAddr='0x10ed43c718714eb63d5aa57b78b54704e256024e'
 def test():
     print('sauhuiuadhiwaudh')
     return 0
@@ -48,6 +50,31 @@ goma0xab14952d2902343fde7c65d7dc095e5c8be86920
 bnx0x8c851d1a123ff703bd1f9dabe631b69902df5f97
 bit0xc864019047b864b6ab609a968ae2725dfaee808a
 '''
+def getOrder(address):
+    addressRes='address+'+address
+    Token='contractaddress='
+    URL='https://api.bscscan.com/api?module=account&action=tokentx&&'+address+'&page=1&offset=50&startblock=0&endblock=99999999999&sort=asc&apikey=TFD2ZDC1W77QAXP38SF9I1Z6T34GBGIGUJ'
+    res = requests.get(URL).text
+    data=json.loads(res)['result']
+    toList=[]
+    toNameList=set()
+    fromNameList=set()
+    bossList=set()
+    fromList=[]
+    pricesList=[]
+    income=0
+    expenditure=0
+    for item in data:
+        if item['from'] == address:
+            fromNameList.add(item['contractAddress'])
+            fromList.append(item)
+        elif item['to'] == address:
+            toNameList.add(item['contractAddress'])
+            toList.append(item)
+    bossList=fromNameList&toNameList
+    for i in bossList:
+        exSql(i)
+    pricesList=Trans
 def newData(contenst,yearsAgo,toDate):
     #fromDate = '2022-03-14'
     #toDate = '2022-04-15'
@@ -62,7 +89,7 @@ def newData(contenst,yearsAgo,toDate):
         print()
         Prices.objects.create(date=datetime.datetime.strptime(item['date'][0:10], "%Y-%m-%d"),price=item['price'], Token=tokenOb)
     print('New Coin Added Successed:',data['contract_ticker_symbol'],data['update_at'])
-    return 0
+    return tokenOb
 def getData(tokenOb,fromDate,toDate):
     #fromDate = '2022-03-14'
     #toDate = '2022-04-15'
@@ -72,7 +99,7 @@ def getData(tokenOb,fromDate,toDate):
     data=json.loads(res)['data'][0]['prices']
     for item in data:
         Prices.objects.create(date=datetime.datetime.strptime(item['date'][0:10], "%Y-%m-%d"),price=item['price'], Token=tokenOb)
-    return 0
+    return tokenOb
 
 def exSql(contenst):
     timeNow=datetime.datetime.now()
