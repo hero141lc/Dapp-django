@@ -3,7 +3,7 @@ from MySQLdb import Date
 from django.db import models
 
 import django.utils.timezone as timezone
-from websockets import Data
+#from websockets import Data
 # Create your models here.
 class Token(models.Model):
     decimals = models.IntegerField(default=0,null=True, blank=True)

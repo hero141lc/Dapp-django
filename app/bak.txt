@@ -1,0 +1,107 @@
+    URL = 'https://api.covalenthq.com/v1/56/address/'+address+'/transactions_v2/?quote-currency=USD&format=JSON&block-signed-at-asc=false&no-logs=false&page-number=0&page-size=1000&key=ckey_c95724e05a2f4802a387160b08e'
+    # 输入在浏览器的网址
+    res = requests.get(URL).text
+    # 发送 GET 方式的请求，并把返回的结果(响应)存储在 res 变量里头
+    # 答第二个问题，get() 方法需要输入一个网页链接
+    data=json.loads(res)['data']
+    # list
+    toList=[]
+    fromList=[]
+    income=0
+    expenditure=0
+    profits=0
+    brickDays=0
+    profitsMax=0
+    profitsMin=0
+    maxTrading={}
+    minTrading={}
+    maxName=''
+    minName=''
+    maxMaifei=0
+    minMaifei=0
+    maxMany=0
+    minMany=0
+    maifeiWho=''
+    winne=1
+    minContent=''
+    maxContent=''
+    d1 = parser.parse(data['items'][-1]['block_signed_at']).date()
+    d2 = datetime.datetime.now()
+    print(d1,d2)
+    months = rrule.rrule(rrule.MONTHLY, dtstart=d1, until=d2).count()+2
+    
+    print(type(pancakeAddr))
+    times= len(data['items'])+1
+    for item in data['items']:
+       # print(type(item['from_address']))
+        if item['from_address']==pancakeAddr:
+            fromList.append(item)
+            income+=int(item['value_quote'])
+            if profitsMax < int(item['value_quote']):
+                profitsMax=int(item['value_quote'])
+                maxTrading=item
+                maxMany=int(item['value_quote'])/int(item['value'])
+        if item['to_address']==pancakeAddr:
+            toList.append(item)
+            expenditure+=int(item['value_quote'])
+            if profitsMin < int(item['value_quote']):
+                profitsMin=int(item['value_quote'])
+                minTrading=item
+                minMany=int(item['value_quote'])/int(item['value'])
+    profits=int(income-expenditure)
+    brickDays=profits/32
+    #if 
+
+    print(len(toList),len(fromList),profits,brickDays,profitsMax,profitsMin)
+
+    #If no income
+   
+    try:
+        for item in minTrading['log_events']:
+            for item2 in item['decoded']['params']:
+                if item2['value'] == address:
+                    minName=item['sender_contract_ticker_symbol']
+                    minContent=item['sender_address']
+                    
+    except:
+        minName='Null'
+        minContent=""
+    try:
+        for item in maxTrading['log_events']:
+            for item2 in item['decoded']['params']:
+                if item2['value'] == address:
+                    maxName=item['sender_contract_ticker_symbol']
+                    maxContent=item['sender_address']
+    except:
+        maxName='Null'
+        maxContent=""
+    print("maxContent:",maxContent,minContent)
+    maxPeak=Kline(maxContent)
+    minPeak=Kline(minContent)
+    maxMaifei=maxMany*maxPeak-profitsMax
+    minMaifei=minPeak*minMany-profitsMin
+    if maxMaifei>minMaifei:
+        maifei=maxMaifei
+        maifeiWho=maxName
+    else:
+        maifei=minMaifei
+        maifeiWho=minName
+    print(minName,maxName,maxPeak,minPeak,maifei)
+    #print(data)
+    if profits>0:
+        winne=1
+    else:
+        winne=0
+    context={
+        'months':months,
+        'times':times,
+        'profitsMax':abs(int(profitsMax)),
+        'profitsMin':abs(int(profitsMin)),
+        'minName':minName,
+        'maxName':maxName,
+        'brickDays':abs(int(brickDays)),
+        'maifeiWho':maifeiWho,
+        'profits':abs(int(profits)),
+        'maifei':abs(int(maifei)),
+        'winne':winne,
+    }

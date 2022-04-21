@@ -11,6 +11,7 @@ import json
 import requests
 import datetime
 from .models import Token,Prices,Trans,Wallet
+from django.db.models import Q,Max
 
 pancakeAddr='0x10ed43c718714eb63d5aa57b78b54704e256024e'
 def test():
@@ -57,24 +58,131 @@ def getOrder(address):
     res = requests.get(URL).text
     data=json.loads(res)['result']
     toList=[]
+    newToDict={}
+    newFromDict={}
+    newDict={}
     toNameList=set()
     fromNameList=set()
     bossList=set()
     fromList=[]
+    toPriceList=[]
+    fromPriceList=[]
     pricesList=[]
     income=0
     expenditure=0
+    times=len(data) +1
+    maxName=''
+    minName=''
+    maxPrice=0
+    minPrice = 0
+    toMoney=0
+    fromMoney=0
+    profitsMax=0
+    profitsMin=0
+    minName=''
+    maxName=''
+    sellAll=[]
+    peakPrice=0
+    maifeiAll=0
+    maifeiCoin=''
+    maifeiPeak=0
     for item in data:
         if item['from'] == address:
             fromNameList.add(item['contractAddress'])
+            item['value']=int(item['value'])
+            item['time']=datetime.fromtimestamp(int(item['timeStamp']))
             fromList.append(item)
+      
         elif item['to'] == address:
             toNameList.add(item['contractAddress'])
+            item['value']=int(item['value'])            
+            item['time']=datetime.fromtimestamp(int(item['timeStamp']))
             toList.append(item)
+
     bossList=fromNameList&toNameList
     for i in bossList:
-        exSql(i)
-    pricesList=Trans
+        toeknOb=exSql(i)
+        priceOb=Prices.objects.filter(Token=toeknOb).values()
+        for item in priceOb:
+            for item2 in fromList:
+                if item2['contractAddress'] == toeknOb.address:
+                    if item2['time'].date()==item.date:
+                        item2['price']=int(item2['value']*item.price)
+                        fromMoney+=item2['price']
+                        if item2['price']>minPrice:
+                            minPrice=item2['price']
+
+                        a=newFromDict.get(item2['contractAddress'])
+                        if a==None:
+                            newFromDict[item2['contractAddress']]={
+                                'name':item2['tokenSymbol'],
+                                'address':item2['contractAddress'],
+                                'price':item2['price'],
+                            }
+                        else:
+                            a['price']+=item2['price']
+                        break
+            for item2 in toList:
+                if item2['contractAddress'] == toeknOb.address:
+                    if item2['time'].date()==item.date:
+                        peakPrice=Prices.objects.filter(Q(Token=toeknOb)&Q(date__gt=item.date)).aggregate(Max('price'))[0].price
+                        #Pric turn to item2['value']*item.price
+                        item2['price']=int(item2['value']*item.price)
+                        #Maifei
+                        maifeitemp=int(item2['value']*peakPrice)-item2['price']
+                        maifeiAll+=maifeitemp
+                        toMoney+=item2['price']
+                        if item2['price']>maxPrice:
+                            maxPrice=item2['price']
+                        if maifeitemp>0 and maifeitemp>maifeiPeak:
+                            maifeiPeak=maifeitemp
+                            maifeiCoin=item2['tokenSymbol']
+                        a=newToDict.get(item2['contractAddress'])
+                        if a==None:
+                            newToDict[item2['contractAddress']]={
+                                'name':item2['tokenSymbol'],
+                                'address':item2['contractAddress'],
+                                'price':item2['price'],
+                            }
+                        else:
+                            a['price']+=item2['price']
+                        break
+    profits=toMoney-fromMoney
+    for j,k in newToDict.items():
+        for s,m in newFromDict.items():
+            if j == s:
+                coninProfits=newToDict[j]['price']-newFromDict[j]['price']
+                newDict[j]={
+                    'name':newFromDict[j]['name'],
+                    'address':j,
+                    'price':coninProfits,
+                }
+                if coninProfits>profitsMax:
+                    profitsMax=coninProfits
+                    maxName=newFromDict[j]['name']
+                if coninProfits<profitsMin:
+                    profitsMin=coninProfits
+                    minName=newFromDict[j]['name']
+    months=12
+    brickDays=int(profits/32)
+    if profits>0:
+        winne=1
+    else:
+        winne=0
+    context={
+        'months':months,
+        'times':times,
+        'profitsMax':abs(int(profitsMax)),
+        'profitsMin':abs(int(profitsMin)),
+        'minName':minName,
+        'maxName':maxName,
+        'brickDays':abs(int(brickDays)),
+        'maifeiWho':maifeiCoin,
+        'maifeiPeak':abs(int(maifeiPeak)),
+        'profits':abs(int(profits)),
+        'maifei':abs(int(maifeiAll)),
+        'winne':winne,
+    }
 def newData(contenst,yearsAgo,toDate):
     #fromDate = '2022-03-14'
     #toDate = '2022-04-15'
