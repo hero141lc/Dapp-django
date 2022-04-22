@@ -163,6 +163,7 @@ def getOrder(address):
     maifeiAll=0
     maifeiCoin=''
     maifeiPeak=0
+    maifeiMax=0
     pixiuKing=[0,0,'']
 
     for item in data:
@@ -203,6 +204,7 @@ def getOrder(address):
                         if maifeitemp>0 and maifeitemp>maifeiPeak:
                             maifeiPeak=maifeitemp
                             maifeiCoin=item2['tokenSymbol']
+                            maifeiMax=item2['price']
                         a=newFromDict.get(item2['contractAddress'])
                         print("a:",item2['contractAddress'])
                         if a==None:
@@ -282,5 +284,6 @@ def getOrder(address):
         'howManyPixiu':pixiuKing[0],
         'piXiuName':pixiuKing[1],
         'piXiuPrice':pixiuKing[2],
+        'maifeiMax':maifeiMax,
     }
     return context

@@ -11,6 +11,7 @@ from sqlalchemy import false, true
 from .models import Token,Prices
 # Diy Function
 from app.getToken import *
+from app.poster import *
 # Create your views here.
 pancakeAddr='0x10ed43c718714eb63d5aa57b78b54704e256024e'
 def index(request):
@@ -60,7 +61,13 @@ def result(request):
 
 def create(request):
     cookies = request.COOKIES
+    print(cookies)
     for cookie_key,cookie_value in cookies.items():
         print(cookie_key,cookie_value)
+    cookie_value=eval(cookie_value)
+    if int(cookie_value['profits'])>0:
+        posterUrl=win(cookies)
+    else:
+        posterUrl=lose(cookies)
     return render(request, 'app/create.html')
 
