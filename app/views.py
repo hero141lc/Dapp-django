@@ -51,6 +51,7 @@ def result(request):
     address=request.GET['address']
     print(request.GET['address'])
     context=getOrder(address)
+    print(context)
     response =render(request, 'app/result.html',context)
    
     response.set_cookie('context', str(context), max_age=None, expires=None,domain=None, secure=False, httponly=False, samesite=None)
