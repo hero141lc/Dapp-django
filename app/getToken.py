@@ -163,7 +163,7 @@ def getOrder(address):
     maifeiAll=0
     maifeiCoin=''
     maifeiPeak=0
-    pixiuKing=[]
+    pixiuKing=[0,0,'']
 
     for item in data:
         #print(address)
