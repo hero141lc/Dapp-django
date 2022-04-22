@@ -54,11 +54,11 @@
     <div class="success">
       
       <div style="padding: 15%;font-size: 1.2rem;" >
-        <text>在过去的<b style="font-size: 1.5rem;">{{month}}</b>月里</text>
+        <text>在过去的<b style="font-size: 1.5rem;">{{months}}</b>月里</text>
         <div style="height: 0.5rem;"></div>
         <text>你在BSC共进行了<b style="font-size: 1.5rem;">{{times}}</b>笔交易</text>
         <div style="height: 0.5rem;"></div>
-        <text>总共盈利<b style="font-size: 1.5rem;">{{profits}}</b></text>
+        <text>总共盈利<b style="font-size: 1.5rem;">{{profits}}$</b></text>
         <div style="height: 0.5rem;"></div>
        <!-- <text>超越了<b style="font-size: 1.5rem;">6{{month}}%</b>散户</text>
         <div style="height: 0.5rem;"></div>-->
@@ -71,7 +71,7 @@
     <div class="fail">
       
       <div style="padding: 15%;font-size: 1.2rem;" >
-        <text>在过去的<b style="font-size: 1.5rem;">{{month}}</b>月里</text>
+        <text>在过去的<b style="font-size: 1.5rem;">{{months}}</b>月里</text>
         <div style="height: 0.5rem;"></div>
         <text>你在BSC共进行了<b style="font-size: 1.5rem;">{{times}}</b>笔交易</text>
         <div style="height: 0.5rem;"></div>
@@ -100,13 +100,15 @@
     <div class="lastMsg">
       
       <div style="padding-left: 15%;padding-top:10%;font-size: 1.2rem;" >
-        <text>你累计冲了<b style="font-size: 1.5rem;">待定</b>个貔貅</text>
+        <text>你累计冲了<b style="font-size: 1.5rem;">{{howManyPixiu}}</b>个貔貅</text>
         <div style="height: 0.5rem;"></div>
-        <text>其中<b style="font-size: 1.5rem;">待定{{month}}</b>项目让你直接腰斩</text>
+        <text>其中<b style="font-size: 1.5rem;">{{piXiuName}}</b>项目让你直接腰斩</text>
         <div style="height: 0.5rem;"></div>
         <text>更让人拍断腿的是</text>
         <div style="height: 0.5rem;"></div>
-        <text>你共计卖飞了<b style="font-size: 1.5rem;">{{maifeiWho}}</b></text>
+        <text>你共计卖飞了<b style="font-size: 1.5rem;">{{maifei}}</b></text>
+        <div style="height: 0.5rem;"></div>
+        <text>最离谱的是<b style="font-size: 1.5rem;">{{maifeiWho}}</b></text>
         <div style="height: 0.5rem;"></div>
         <text>收益为<b style="font-size: 1.5rem;">{{profitsMax}}$</b></text>
         <div style="height: 0.5rem;"></div>

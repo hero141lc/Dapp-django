@@ -31,7 +31,7 @@ factory_contract = web3.eth.contract(address=factory_address, abi=factory_abi)
 #detect bot 
 bot_abi = json.loads('[{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"pairAddr","type":"address"},{"internalType":"address","name":"tokenAddr","type":"address"},{"internalType":"address","name":"_WETH","type":"address"},{"internalType":"uint256","name":"wbnbAmountIn","type":"uint256"}],"name":"detectFee","outputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"pairAddr","type":"address"},{"internalType":"address","name":"tokenAddr","type":"address"},{"internalType":"address","name":"_WETH","type":"address"},{"internalType":"uint256","name":"wbnbAmountIn","type":"uint256"}],"name":"detectGas","outputs":[{"internalType":"uint256","name":"gasUsedOfBuy","type":"uint256"},{"internalType":"uint256","name":"gasUsedOfSell","type":"uint256"}],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amountOut","type":"uint256"}],"name":"withdrawBNB","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"amountOut","type":"uint256"}],"name":"withdrawToken","outputs":[],"stateMutability":"payable","type":"function"}]')
 bot_address = '0x4780B172B24cE1fC9e63A4A61378080de4B029B5'
-bot_contract = web3.eth.contract(address=address, abi=abi)
+bot_contract = web3.eth.contract(address=bot_address, abi=bot_abi)
 
 def detectFee(pair_addr,token_addr,base_token_addr):
     return bot_contract.functions.detectFee(pair_addr,token_addr,base_token_addr,10000000000000000).call()
@@ -208,7 +208,6 @@ def getOrder(address):
             for item2 in fromList:
                 if item2['contractAddress'] == toeknOb.address:
                     if item2['time'].date()==item['date'].date():
-                        print("sajkdhaklhdwoajdiwka--------------")
                         item2['price']=int(item2['value']*item['price'])
                         peakPrice=Prices.objects.filter(Q(Token=toeknOb)&Q(date__gt=item['date'])).aggregate(Max('price'))['price__max']
                         #Pric turn to item2['value']*item.price
@@ -223,7 +222,7 @@ def getOrder(address):
                             maifeiCoin=item2['tokenSymbol']
                             maifeiMax=item2['price']
                         a=newFromDict.get(item2['contractAddress'])
-                        print("a:",item2['contractAddress'])
+        
                         if a==None:
                             newFromDict[item2['contractAddress']]={
                                 'name':item2['tokenSymbol'],
@@ -235,17 +234,17 @@ def getOrder(address):
                         break
             for item2 in toList:
                 if item2['contractAddress'] == toeknOb.address:
-                    #print(item2['time'].date(),item['date'].date())
+                 
                     if item2['time'].date()==item['date'].date():
-                        print("sajkdhaklhdwoajdiwka--------------")
+                     
                         item2['price']=int(item2['value']*item['price'])
-                        print("item2:",item2['price'])
+              
                         toMoney+=item2['price']
                         if item2['price']>maxPrice:
                             maxPrice=item2['price']
 
                         a=newToDict.get(item2['contractAddress'])
-                        print("a:",a)
+              
                         if a==None:
                             newToDict[item2['contractAddress']]={
                                 'name':item2['tokenSymbol'],
@@ -256,30 +255,36 @@ def getOrder(address):
                             a['price']+=item2['price']
                         break
     profits=toMoney-fromMoney
-    print(newFromDict,newToDict)
+    print(newFromDict)
+    print(newToDict)
     pixiuKing[0]=0
     pixiuKing[1]=0
     for j,k in newToDict.items():
         print("k")
-        if piXiu(k['address'])!=0:
+        try:
+            a=piXiu(k['address'])
+        except:
+            a=0
+        if a!=0:
             pixiuKing[0]+=1
             if [k]['price']>pixiuKing[1]:
                 pixiuKing[1]=[k]['price']
                 pixiuKing[2]=[k]['name']
         for s,m in newFromDict.items():
-            if k == m:
-                coninProfits=newToDict[k]['price']-newFromDict[k]['price']
-                newDict[k]={
-                    'name':newFromDict[k]['name'],
-                    'address':k,
+            if j == s:
+                coninProfits=newToDict[j]['price']-newFromDict[j]['price']
+                newDict[j]={
+                    'name':newFromDict[j]['name'],
+                    'address':j,
                     'price':coninProfits,
                 }
+                print("coninProfits>profitsMax",newToDict[j],newFromDict[j],coninProfits,profitsMax)
                 if coninProfits>profitsMax:
                     profitsMax=coninProfits
-                    maxName=newFromDict[k]['name']
+                    maxName=newFromDict[j]['name']
                 if coninProfits<profitsMin:
                     profitsMin=coninProfits
-                    minName=newFromDict[k]['name']
+                    minName=newFromDict[j]['name']
     months=12
     brickDays=int(profits/32)
     if profits>0:

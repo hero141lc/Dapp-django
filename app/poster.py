@@ -6,7 +6,8 @@ class posterapi():
     def __init__(self, endpoint: str, token: str):
         if endpoint.endswith("/"):
             endpoint = endpoint[0:-1]
-        self.endpoint = endpoint
+        #self.endpoint = endpoint
+        self.endpoint ='http://brickcn.xyz:5000'
         self.token = token
 
     def getUrl(self, posterId: str, params: dict = {}):
@@ -22,8 +23,10 @@ class posterapi():
         payload = json.dumps(params)
         response = requests.request("POST", url, headers=headers, data=payload)
         link = response.json()['data']['url']  # type:str
+        link='http://brickcn.xyz:5000/'+link[link.index('v'):]
         if not link.startswith('http'):
             link = self.endpoint + link
+            print('self.endpoint',self.endpoint)
         self.link = link
         print(self.link)
         return link
