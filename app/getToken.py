@@ -33,26 +33,25 @@ bot_abi = json.loads('[{"constant":true,"inputs":[],"name":"name","outputs":[{"n
 bot_address = '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c'
 bot_contract = web3.eth.contract(address=bot_address, abi=bot_abi)
 
-def detectFee():
-    
-    return bot_contract.functions.detectFee(pairAddr,token_address,WETH,10000000000000000).call()
+def detectFee(pair_addr,token_addr,base_token_addr):
+    return bot_contract.functions.detectFee(pair_addr,token_addr,base_token_addr,10000000000000000).call()
 
 
 def getPair(token_addr, baseaddr):
-    #ingore lower case
-    checksumed_token_address = web3.toChecksumAddress(token_addr) 
-
     return factory_contract.functions.getPair(WETH,checksumed_token_address).call()
 
 def piXiu(token_address):
-    pairAddr = getPair(token_address,WETH)
+    #ingore lower case
+    checksumed_token_address = web3.toChecksumAddress(token_addr) 
+    pairAddr = getPair(checksumed_token_address,WETH)
     if pairAddr==None:
         print("empty pair address")
+        return
         
     print(pairAddr)
 
 
-    result = detectFee()
+    result = detectFee(pairAddr, checksumed_token_address, WETH)
     print(result)
     if result==None or len(result)!=2:
         print("unsellable")
