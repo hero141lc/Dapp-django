@@ -38,11 +38,11 @@ def detectFee(pair_addr,token_addr,base_token_addr):
 
 
 def getPair(token_addr, baseaddr):
-    return factory_contract.functions.getPair(WETH,checksumed_token_address).call()
+    return factory_contract.functions.getPair(WETH,token_addr).call()
 
 def piXiu(token_address):
     #ingore lower case
-    checksumed_token_address = web3.toChecksumAddress(token_addr) 
+    checksumed_token_address = web3.toChecksumAddress(token_address) 
     pairAddr = getPair(checksumed_token_address,WETH)
     if pairAddr==None:
         print("empty pair address")
