@@ -25,6 +25,7 @@ class posterapi():
         if not link.startswith('http'):
             link = self.endpoint + link
         self.link = link
+        print(self.link)
         return link
 
     def save(self, filename='tmp.jpg'):

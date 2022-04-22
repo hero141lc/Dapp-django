@@ -69,5 +69,6 @@ def create(request):
         posterUrl=win(cookies)
     else:
         posterUrl=lose(cookies)
-    return render(request, 'app/create.html')
+    cookie_value['posterUrl']=posterUrl
+    return render(request, 'app/create.html',cookie_value)
 
