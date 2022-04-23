@@ -56,9 +56,7 @@ def piXiu(token_address):
     if result==None or len(result)!=2:
         print("unsellable")
         return 1
-    if result==[0, 0]:
-        print("unsellable")
-        return 1
+
 
     else:
         print(result)
