@@ -8,7 +8,7 @@ import django.utils.timezone as timezone
 class Token(models.Model):
     decimals = models.IntegerField(default=0,null=True, blank=True)
     name = models.CharField(max_length=50,null=True, blank=True)
-    symbol = models.CharField(max_length=10,null=True, blank=True)
+    symbol = models.CharField(max_length=50,null=True, blank=True)
     logo_url = models.CharField(max_length=150,null=True, blank=True)
     address = models.CharField(max_length=50,unique=True,primary_key=True)
     update_at = models.DateTimeField(default = timezone.now)
