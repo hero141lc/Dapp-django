@@ -42,7 +42,7 @@
     background-size: cover;
     background-size: 100%,100%;
     width: 100vw;
-    height: 30rem;
+    height: 28rem;
     background-repeat:no-repeat;
   }
   </style>
@@ -99,30 +99,31 @@
     
     <div class="lastMsg">
       
-      <div style="padding-left: 15%;padding-top:10%;font-size: 1.2rem;" >
-        <text>你累计冲了<b style="font-size: 1.5rem;">{{howManyPixiu}}</b>个貔貅</text>
+      <div style="padding-left: 15%;padding-top:10%;font-size: 1rem;" >
+        <text>你累计冲了<b style="font-size: 1.2rem;">{{howManyPixiu}}</b>个貔貅</text>
         <div style="height: 0.5rem;"></div>
-        <text>其中<b style="font-size: 1.5rem;">{{piXiuName}}</b>项目让你直接腰斩</text>
+        <text>其中<b style="font-size: 1.2rem;">{{piXiuName}}</b>项目让你直接腰斩</text>
         <div style="height: 0.5rem;"></div>
         <text>更让人拍断腿的是</text>
         <div style="height: 0.5rem;"></div>
-        <text>你共计卖飞了<b style="font-size: 1.5rem;">{{maifei}}</b></text>
+        <text>你共计卖飞了<b style="font-size: 1.2rem;">{{maifei}}</b></text>
         <div style="height: 0.5rem;"></div>
-        <text>最离谱的是<b style="font-size: 1.5rem;">{{maifeiWho}}</b></text>
+        <text>最离谱的是<b style="font-size: 1.2rem;">{{maifeiWho}}</b></text>
         <div style="height: 0.5rem;"></div>
-        <text>收益为<b style="font-size: 1.5rem;">{{profitsMax}}$</b></text>
+        <text>收益为<b style="font-size: 1.2rem;">{{profitsMax}}$</b></text>
         <div style="height: 0.5rem;"></div>
-        <text>在卖出后它直接暴涨，你因此少赚了<br><b style="font-size: 1.5rem;">{{maifei}}$</b></text>
+        <text>在卖出后它直接暴涨，你因此少赚了<br><b style="font-size: 1.2rem;">{{maifei}}$</b></text>
         <div style="height: 0.5rem;"></div>
         <text>工头挺同情你的</text>
      
       </div>
     </div>
-    <div style="height: 10vh;"></div>
+   <!--  <div style="height: 10vh;"></div> -->
     <div style="text-align:center">
       <form action="{% url 'create' %}" method="get">
     <button type="submit" value="Submit" type="button" class="btn btn-danger btn-lg " style="width: 70vw;background: #ED656A;box-shadow: inset 1px 2px 2px 0 rgba(255,255,255,0.39);border-radius: 49.5px;">点击生成专属海报</button>
   </form>
   </div>
+  <div style="height: 10vh;"></div>
 </body>
 </html>

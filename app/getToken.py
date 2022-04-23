@@ -148,7 +148,7 @@ def exSql(contenst):
 def getOrder(address):
     addressRes='address='+address
     Token='contractaddress='
-    URL='https://api.bscscan.com/api?module=account&action=tokentx&&'+addressRes+'&page=1&offset=50&startblock=0&endblock=99999999999&sort=asc&apikey=TFD2ZDC1W77QAXP38SF9I1Z6T34GBGIGUJ'
+    URL='https://api.bscscan.com/api?module=account&action=tokentx&&'+addressRes+'&page=1&offset=10000&startblock=0&endblock=99999999999&sort=asc&apikey=TFD2ZDC1W77QAXP38SF9I1Z6T34GBGIGUJ'
     res = requests.get(URL).text
     data=json.loads(res)['result']
     toList=[]
@@ -184,7 +184,7 @@ def getOrder(address):
     pixiuKing=[0,0,'']
 
     for item in data:
-        #print(address)
+
         if item['from'] == address:
 
             fromNameList.add(item['contractAddress'])
@@ -199,9 +199,9 @@ def getOrder(address):
             toList.append(item)
 
     bossList=fromNameList&toNameList
-    
+ 
     for i in bossList:
-        #print(i)
+ 
         toeknOb=exSql(i)
         priceOb=Prices.objects.filter(Token=toeknOb).values()
         for item in priceOb:
@@ -209,6 +209,7 @@ def getOrder(address):
                 if item2['contractAddress'] == toeknOb.address:
                     if item2['time'].date()==item['date'].date():
                         item2['price']=int(item2['value']*item['price'])
+                    
                         peakPrice=Prices.objects.filter(Q(Token=toeknOb)&Q(date__gt=item['date'])).aggregate(Max('price'))['price__max']
                         #Pric turn to item2['value']*item.price
                         #Maifei
@@ -234,9 +235,9 @@ def getOrder(address):
                         break
             for item2 in toList:
                 if item2['contractAddress'] == toeknOb.address:
-                 
+                   
                     if item2['time'].date()==item['date'].date():
-                     
+                    
                         item2['price']=int(item2['value']*item['price'])
               
                         toMoney+=item2['price']
@@ -286,7 +287,7 @@ def getOrder(address):
                     profitsMin=coninProfits
                     minName=newFromDict[j]['name']
     months=12
-    brickDays=int(profits/32)
+    brickDays=int(profits/1e19/32)
     if profits>0:
         winne=1
     else:
@@ -294,15 +295,15 @@ def getOrder(address):
     context={
         'months':months,
         'times':times,
-        'profitsMax':abs(int(profitsMax)),
-        'profitsMin':abs(int(profitsMin)),
+        'profitsMax':abs(int(profitsMax/1e19)),
+        'profitsMin':abs(int(profitsMin/1e19)),
         'minName':minName,
         'maxName':maxName,
         'brickDays':abs(int(brickDays)),
         'maifeiWho':maifeiCoin,
-        'maifeiPeak':abs(int(maifeiPeak)),
-        'profits':abs(int(profits)),
-        'maifei':abs(int(maifeiAll)),
+        'maifeiPeak':abs(int(maifeiPeak/1e19)),
+        'profits':abs(int(profits/1e19)),
+        'maifei':abs(int(maifeiAll/1e19)),
         'winne':winne,
         'howManyPixiu':pixiuKing[0],
         'piXiuName':pixiuKing[1],
