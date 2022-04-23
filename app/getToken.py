@@ -67,8 +67,21 @@ def piXiu(token_address):
     else:
         print(result)
         return 0
-
-
+#常规检测貔貅
+def isPixiu(token_address):
+    try:
+        tokenOb=Token.objects.get(token_address)
+        if tokenOb.pixiu == True:
+            return 1
+        else:
+            return 0
+    except:
+        tokenOb=exSql(token_address)
+        if tokenOb.pixiu == True:
+            return 1
+        else:
+            return 0
+        print("no")
 def test():
     print('sauhuiuadhiwaudh')
     return 0
@@ -115,7 +128,11 @@ def newData(contenst,yearsAgo,toDate):
     res = requests.get(URL).text
     data=json.loads(res)['data'][0]
     priceList = data['prices']
-    tokenOb= Token.objects.create(decimals=int(data['contract_decimals']),name=data['contract_name'],symbol=data['contract_ticker_symbol'],logo_url=data['logo_url'],address=data['contract_address'],update_at=datetime.datetime.strptime(data['update_at'][0:11], "%Y-%m-%dT"),quote_currency=data['quote_currency'])
+    npixiu = False
+    if piXiu(contenst) != 0:
+        npixiu = True
+    print("npixiu",npixiu)
+    tokenOb= Token.objects.create(decimals=int(data['contract_decimals']),name=data['contract_name'],symbol=data['contract_ticker_symbol'],logo_url=data['logo_url'],address=data['contract_address'],update_at=datetime.datetime.strptime(data['update_at'][0:11], "%Y-%m-%dT"),quote_currency=data['quote_currency'],pixiu=npixiu)
     for item in priceList:
         Prices.objects.create(date=datetime.datetime.strptime(item['date'][0:10], "%Y-%m-%d"),price=item['price'], Token=tokenOb)
     print('New Coin Added Successed:',data['contract_ticker_symbol'],data['update_at'])
@@ -208,7 +225,7 @@ def getOrder(address):
             toList.append(item)
 
     bossList=fromNameList&toNameList
-    print(bossList,fromNameList,toNameList)
+    #print(bossList,fromNameList,toNameList)
     for i in bossList:
  
         toeknOb=exSql(i)
@@ -276,7 +293,7 @@ def getOrder(address):
     for j,k in newToDict.items():
         print("k")
         try:
-            a=piXiu(k['address'])
+            a=isPixiu(k['address'])
         except:
             a=0
         if a!=0:
@@ -284,6 +301,7 @@ def getOrder(address):
             if k['price']>pixiuKing[1]:
                 pixiuKing[1]=k['price']
                 pixiuKing[2]=k['name']
+            break
         for s,m in newFromDict.items():
             if j == s:
                 coninProfits=newToDict[j]['price']-newFromDict[j]['price']

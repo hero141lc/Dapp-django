@@ -13,6 +13,7 @@ class Token(models.Model):
     address = models.CharField(max_length=50,unique=True,primary_key=True)
     update_at = models.DateTimeField(default = timezone.now)
     quote_currency = models.CharField(max_length=20,null=True, blank=True)
+    pixiu=models.BooleanField(null=True, blank=True)
     pub_date = models.DateTimeField('date published',auto_now = True)
 
 class Prices(models.Model):

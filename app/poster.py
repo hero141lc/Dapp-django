@@ -44,13 +44,13 @@ def win(paramsa):
  
     params = {}
     params["times"]=str(paramsa["times"])
-    params["profits"]=str(paramsa["profits"])
+    params["profits"]=str(paramsa["profits"])+'$'
     params["brickDays"]=str(paramsa["brickDays"])
     params["howManyPixiu"]=str(paramsa["howManyPixiu"])
     params["piXiuName"]=str(paramsa["piXiuName"])
-    params["maifeiMax"]=str(paramsa["maifeiMax"])
+    params["maifeiMax"]=str(paramsa["maifeiMax"])+'$'
     params["maifeiWho"]=str(paramsa["maifeiWho"])
-    params["maifeiPeak"]=str(paramsa["maifeiPeak"])
+    params["maifeiPeak"]=str(paramsa["maifeiPeak"])+'$'
 
     url = api.getUrl('9', params)
     print(url)
@@ -61,14 +61,14 @@ def lose(paramsa):
     {'months': 12, 'times': 4073, 'profitsMax': 6709, 'profitsMin': 442, 'minName': 'EKTA', 'maxName': 'FFC', 'brickDays': 232, 'maifeiWho': 'JF', 'maifeiPeak': 131020213, 'profits': 7445, 'maifei': 132615274, 'winne': 1, 'howManyPixiu': 51, 'piXiuName': 17587089259908986131928, 'piXiuPrice': 'BSC-USD', 'maifeiMax': 34512846280213397504}
     params = {}
     params["times"]=str(paramsa["times"])
-    params["profits"]=str(paramsa["profits"])
-    params["brickDays"]="0"
-    params["profitsMin"]="Null"
-    params["howManyPixiu"]="0"
-    params["piXiuName"]="Null"
-    params["piXiuPrice"]="0$"
-    params["maifeiWho"]="Null"
-    params["maifeiPeak"]="0$"
+    params["profits"]=str(paramsa["profits"])+'$'
+    params["brickDays"]=str(paramsa["brickDays"])
+    params["profitsMin"]=str(params["profitsMin"])+'$'
+    params["howManyPixiu"]=str(params["howManyPixiu"])
+    params["piXiuName"]=str(params["piXiuName"])
+    params["piXiuPrice"]=str(params["piXiuPrice"])+'$'
+    params["maifeiWho"]=str(params["maifeiWho"])
+    params["maifeiPeak"]=str(params["maifeiPeak"])+'$'
     '''
     params = {}
     params["times"]="0"
