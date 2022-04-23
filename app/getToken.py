@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 '''
 
 import datetime
@@ -41,6 +42,9 @@ def getPair(token_addr, baseaddr):
     return factory_contract.functions.getPair(WETH,token_addr).call()
 
 def piXiu(token_address):
+    #Ban Busd 
+    if token_address=='0xe9e7cea3dedca5984780bafc599bd69add087d56':
+        return 0
     #ingore lower case
     checksumed_token_address = web3.toChecksumAddress(token_address) 
     pairAddr = getPair(checksumed_token_address,WETH)
@@ -56,7 +60,9 @@ def piXiu(token_address):
     if result==None or len(result)!=2:
         print("unsellable")
         return 1
-
+    if result==[0, 0]:
+        print("unsellable")
+        return 1
 
     else:
         print(result)
