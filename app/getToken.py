@@ -52,11 +52,11 @@ def piXiu(token_address):
 
 
     result = detectFee(pairAddr, checksumed_token_address, WETH)
-    print(result)
+    print(result,type(result))
     if result==None or len(result)!=2:
         print("unsellable")
         return 1
-    if result==[[0, 0],[0, 0]]:
+    if result==[0, 0]:
         print("unsellable")
         return 1
 
@@ -213,30 +213,36 @@ def getOrder(address):
             for item2 in fromList:
                 if item2['contractAddress'] == toeknOb.address:
                     if item2['time'].date()==item['date'].date():
-                        item2['price']=int(item2['value']*item['price'])
-                    
-                        peakPrice=Prices.objects.filter(Q(Token=toeknOb)&Q(date__gt=item['date'])).aggregate(Max('price'))['price__max']
-                        #Pric turn to item2['value']*item.price
-                        #Maifei
-                        maifeitemp=int(item2['value']*peakPrice)-item2['price']
-                        maifeiAll+=maifeitemp
-                        fromMoney+=item2['price']
-                        if item2['price']>minPrice:
-                            minPrice=item2['price']
-                        if maifeitemp>0 and maifeitemp>maifeiPeak:
-                            maifeiPeak=maifeitemp
-                            maifeiCoin=item2['tokenSymbol']
-                            maifeiMax=item2['price']
-                        a=newFromDict.get(item2['contractAddress'])
-        
-                        if a==None:
-                            newFromDict[item2['contractAddress']]={
-                                'name':item2['tokenSymbol'],
-                                'address':item2['contractAddress'],
-                                'price':item2['price'],
-                            }
-                        else:
-                            a['price']+=item2['price']
+                        try:
+                            item2['price']=int(item2['value']*item['price'])
+                        
+                            peakPrice=Prices.objects.filter(Q(Token=toeknOb)&Q(date__gt=item['date'])).aggregate(Max('price'))['price__max']
+                            #Pric turn to item2['value']*item.price
+                            #Maifei
+                            maifeitemp=int(item2['value']*peakPrice)-item2['price']
+                            maifeiAll+=maifeitemp
+                            fromMoney+=item2['price']
+                            if item2['price']>minPrice:
+                                minPrice=item2['price']
+                            if maifeitemp>0 and maifeitemp>maifeiPeak:
+                                maifeiPeak=maifeitemp
+                                maifeiCoin=item2['tokenSymbol']
+                                maifeiMax=item2['price']
+                            a=newFromDict.get(item2['contractAddress'])
+            
+                            if a==None:
+                                newFromDict[item2['contractAddress']]={
+                                    'name':item2['tokenSymbol'],
+                                    'address':item2['contractAddress'],
+                                    'price':item2['price'],
+                                }
+                            else:
+                                a['price']+=item2['price']
+                        except Exception as e:
+                            print("ERROR:",e)
+                            print("contractAddress:",item2['contractAddress'])
+                            print("tokenSymbol",item2['tokenSymbol'])
+
                         break
             for item2 in toList:
                 if item2['contractAddress'] == toeknOb.address:
@@ -263,8 +269,6 @@ def getOrder(address):
     profits=toMoney-fromMoney
     print(newFromDict)
     print(newToDict)
-    pixiuKing[0]=0
-    pixiuKing[1]=0
     for j,k in newToDict.items():
         print("k")
         try:
@@ -273,9 +277,9 @@ def getOrder(address):
             a=0
         if a!=0:
             pixiuKing[0]+=1
-            if [k]['price']>pixiuKing[1]:
-                pixiuKing[1]=[k]['price']
-                pixiuKing[2]=[k]['name']
+            if k['price']>pixiuKing[1]:
+                pixiuKing[1]=k['price']
+                pixiuKing[2]=k['name']
         for s,m in newFromDict.items():
             if j == s:
                 coninProfits=newToDict[j]['price']-newFromDict[j]['price']
@@ -311,8 +315,8 @@ def getOrder(address):
         'maifei':abs(int(maifeiAll/1e19)),
         'winne':winne,
         'howManyPixiu':pixiuKing[0],
-        'piXiuName':pixiuKing[1],
-        'piXiuPrice':pixiuKing[2],
+        'piXiuName':pixiuKing[2],
+        'piXiuPrice':abs(int(pixiuKing[1]/1e19)),
         'maifeiMax':maifeiMax,
     }
     return context

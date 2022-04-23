@@ -8,8 +8,21 @@
   <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
   <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  
 </head>
 {% load static %} 
+<script>
+  var but=document.getElementById('sub');
+  var temp=0; //0为显示
+  function hide(){
+  //隐藏咯
+      document.getElementById('loading').style="display:block";
+      temp=1; //隐藏了就把状态改变了
+   
+  }
+</script>
+
+<link rel="stylesheet" type="text/css" href="{% static '/app/css/func.css' %}">
 <style>
 
   .bg{
@@ -47,7 +60,8 @@
   }
   </style>
 <body>
-      
+
+
     <img src="{% static '/app/image/bg3.png' %}" class="bg"/>
     <div style="height: 10vh;"></div>
     {% if winne %}
@@ -96,7 +110,11 @@
     </div>
     <img src="{% static '/app/image/fail3.png' %}" style="width: 100%;height:15rem;" />
     {% endif %}
-    
+    <div id="loading"  style="display: none;">
+      <div id="loading_bg">
+          <div class="loader">生成海报中...</div>
+      </div>
+  </div>
     <div class="lastMsg">
       
       <div style="padding-left: 15%;padding-top:10%;font-size: 1rem;" >
@@ -106,7 +124,7 @@
         <div style="height: 0.5rem;"></div>
         <text>更让人拍断腿的是</text>
         <div style="height: 0.5rem;"></div>
-        <text>你共计卖飞了<b style="font-size: 1.2rem;">{{maifei}}</b></text>
+        <text>你共计卖飞了<b style="font-size: 1.2rem;">{{maifei}}$</b></text>
         <div style="height: 0.5rem;"></div>
         <text>最离谱的是<b style="font-size: 1.2rem;">{{maifeiWho}}</b></text>
         <div style="height: 0.5rem;"></div>
@@ -121,7 +139,7 @@
    <!--  <div style="height: 10vh;"></div> -->
     <div style="text-align:center">
       <form action="{% url 'create' %}" method="get">
-    <button type="submit" value="Submit" type="button" class="btn btn-danger btn-lg " style="width: 70vw;background: #ED656A;box-shadow: inset 1px 2px 2px 0 rgba(255,255,255,0.39);border-radius: 49.5px;">点击生成专属海报</button>
+    <button onclick="hide()" type="submit" value="Submit" type="button" class="btn btn-danger btn-lg " style="width: 70vw;background: #ED656A;box-shadow: inset 1px 2px 2px 0 rgba(255,255,255,0.39);border-radius: 49.5px;">点击生成专属海报</button>
   </form>
   </div>
   <div style="height: 10vh;"></div>
