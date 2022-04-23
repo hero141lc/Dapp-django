@@ -146,6 +146,7 @@ def exSql(contenst):
     # 答第二个问题，get() 方法需要输入一个网页链接
     return data
 def getOrder(address):
+    address=address.lower()
     addressRes='address='+address
     Token='contractaddress='
     URL='https://api.bscscan.com/api?module=account&action=tokentx&&'+addressRes+'&page=1&offset=10000&startblock=0&endblock=99999999999&sort=asc&apikey=TFD2ZDC1W77QAXP38SF9I1Z6T34GBGIGUJ'
@@ -199,7 +200,7 @@ def getOrder(address):
             toList.append(item)
 
     bossList=fromNameList&toNameList
- 
+    print(bossList,fromNameList,toNameList)
     for i in bossList:
  
         toeknOb=exSql(i)
