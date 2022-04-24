@@ -4,3 +4,4 @@ pymysql
 rx
 requests
 python-dateutil
+uwsgi
