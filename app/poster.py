@@ -52,7 +52,7 @@ def win(paramsa):
     #api.save()
 def lose(paramsa):
     api = posterapi('http://brickcn.xyz:5000/', 'ApfrIzxCoK1DwNZOEJCwlrnv6QZ0PCdv')
-    {'months': 12, 'times': 4073, 'profitsMax': 6709, 'profitsMin': 442, 'minName': 'EKTA', 'maxName': 'FFC', 'brickDays': 232, 'maifeiWho': 'JF', 'maifeiPeak': 131020213, 'profits': 7445, 'maifei': 132615274, 'winne': 1, 'howManyPixiu': 51, 'piXiuName': 17587089259908986131928, 'piXiuPrice': 'BSC-USD', 'maifeiMax': 34512846280213397504}
+    paramsa = eval(paramsa['context'])
     params = {}
     params["times"]=str(paramsa["times"])
     params["profits"]=str(paramsa["profits"])+'$'

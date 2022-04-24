@@ -172,7 +172,7 @@ def exSql(contenst):
         try: 
             data=newData(contenst,yearsAgo,toDate)
         except:
-            data=Token.objects.get(address=contenst)
+            return 1
 
     # 发送 GET 方式的请求，并把返回的结果(响应)存储在 res 变量里头
     # 答第二个问题，get() 方法需要输入一个网页链接
@@ -237,6 +237,8 @@ def getOrder(address):
     for i in bossList:
  
         toeknOb=exSql(i)
+        if toeknOb==1:
+            break
         priceOb=Prices.objects.filter(Token=toeknOb).values()
         for item  in priceOb:
             for item2 in fromList:
