@@ -85,11 +85,11 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
         # 数据库引擎
-        'NAME': 'tocken_price', 
+        'NAME': 'hero', 
         # 数据库名
-        'USER': 'tocken_price', 
+        'USER': 'hero', 
         # 账号
-        'PASSWORD': 'yBYDcapFTd8faZ62',
+        'PASSWORD': 'TZLXEw8yaHWWwxkp',
          # 密码
         'HOST': '209.141.51.20', 
         # HOST
