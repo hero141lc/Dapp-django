@@ -14,6 +14,7 @@ import datetime
 from .models import Token,Prices,Trans,Wallet
 from django.db.models import Q,Max
 from web3 import Web3
+import time
 pancakeAddr='0x10ed43c718714eb63d5aa57b78b54704e256024e'
 
 
@@ -178,6 +179,7 @@ def exSql(contenst):
     # 答第二个问题，get() 方法需要输入一个网页链接
     return data
 def getOrder(address):
+    start_time = time.time()
     address=address.strip().replace('\n', '').replace('\r', '').lower()
     addressRes='address='+address
     Token='contractaddress='
@@ -351,6 +353,8 @@ def getOrder(address):
         'piXiuPrice':abs(int(pixiuKing[1]/1e19)),
         'maifeiMax':maifeiMax,
     }
+    end_time = time.time()
+    print("Important:Result耗时: {:.2f}秒".format(end_time - start_time))
     return context
 def howManyHoulder():
     token_addr="0xc4893fEa8547Fb1A4D860518285AF6655424645f"
