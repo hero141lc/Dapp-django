@@ -220,7 +220,7 @@ def getOrder(address):
 
     for item in data:
        
-        if type(item) != 'objects':
+        if type(item) != 'dict':
             print("item-data:",type(item),item)
             continue
     
