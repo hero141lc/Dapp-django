@@ -83,11 +83,16 @@ WSGI_APPLICATION = 'brickDapp.wsgi.application'
 '''
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', # 数据库引擎
-        'NAME': 'tocken_price', # 数据库名
-        'USER': 'tocken_price', # 账号
-        'PASSWORD': 'yBYDcapFTd8faZ62', # 密码
-        'HOST': '209.141.51.20', # HOST
+        'ENGINE': 'django.db.backends.mysql', 
+        # 数据库引擎
+        'NAME': 'tocken_price', 
+        # 数据库名
+        'USER': 'tocken_price', 
+        # 账号
+        'PASSWORD': 'yBYDcapFTd8faZ62',
+         # 密码
+        'HOST': '209.141.51.20', 
+        # HOST
         'POST': 3306, # 端口
 
     }
