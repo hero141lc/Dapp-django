@@ -32,3 +32,7 @@ https://api.bscscan.com/api?module=account&action=tokentx&&address=0x6A3FD03803a
 
 李治:
 流通总量，池子总量，每日交易量的文档：https://www.covalenthq.com/docs/api/#/0/Get%20Pancakeswap%20v2%20pools%20by%20address/USD/1
+
+
+create页面市值有问题
+BNB

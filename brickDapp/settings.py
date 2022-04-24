@@ -74,23 +74,23 @@ WSGI_APPLICATION = 'brickDapp.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
+'''DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
    }
-}
-'''DATABASES = {
+}'''
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # 数据库引擎
         'NAME': 'tocken_price', # 数据库名
         'USER': 'tocken_price', # 账号
         'PASSWORD': 'yBYDcapFTd8faZ62', # 密码
-        'HOST': '209.141.51.211', # HOST
+        'HOST': '209.141.51.20', # HOST
         'POST': 3306, # 端口
 
     }
-}'''
+}
 
 
 # Password validation

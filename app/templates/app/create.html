@@ -132,22 +132,23 @@
       <div class="row">
         <div class="col-4">
 
-          <div style=" text-align: center;margin: auto;padding-top: 1rem">
-            <text style="font-size: 1.8rem;color: red;">{{priceNow}}/1e7</text>
+          <div style=" text-align: center;margin: auto;padding-top: 1px">
+   <img src="{% static '/app/image/temp.jpg' %}" style="width:8rem;height:8rem"/><!-- 
+            <text style="font-size: 1.8rem;color: red;">{{priceNow}}</text>
             <br>
             <text style="font-size: 1rem;color: gray;">现价</text>
-
+ -->
           </div>
         </div>
         <div class="col-8">
-          <div style="vertical-align: middle;line-height:2rem">
-            <text
+          <div style="vertical-align: middle;line-height:2rem;padding-top: 1rem">
+     <!--        <text
               style="font-size: 1rem;color: gray;">市&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;值：<span
                 style="color: black;">{{market}}</span></text>
-            <br>
+            <br> -->
             <text
               style="font-size: 1rem;color: gray;">底&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;池：<span
-                style="color: black;">{{reserve}}亿</span></text>
+                style="color: black;">{{reserve}}BNB</span></text>
             <br>
             <text style="font-size: 1rem;color: gray;">持币地址数量：<span style="color: black;">{{houlders}}</span></text>
             <br>
@@ -155,9 +156,9 @@
           </div>
         </div>
       </div>
-      <div style="height: 5vh;"></div>
+      <!-- <div style="height: 5vh;"></div> -->
       <div>
-        <div id="main" style="width: 95%;height:20rem;"></div>
+        <!-- <div id="main" style="width: 95%;height:20rem;"></div>
         <script src="{% static '/app/js/echarts.min.js' %}"></script>
         <script type="text/javascript">
           // 基于准备好的dom，初始化echarts实例
@@ -449,12 +450,14 @@
           };
           // 使用刚指定的配置项和数据显示图表。
           myChart.setOption(option);
-        </script>
+        </script> -->
 
       </div>
       <div style="height: 5vh;"></div>
-      <div>
-        <text style="color: gray;">偷偷告诉你，Brick是meme，当你能看到这段话时，证明Brick已经成功创造了热点，接下来你懂的</text>
+      <div style="margin-left: 1rem; font-size: 1rem;">
+        <div style="text-align: center;">
+        <text style="color: black;text-align: center;"><b>偷偷告诉你，Brick是meme！</b><br></text></div>
+          <text style="color: black;"><b>当你能看到这段话时，证明Brick已经成功创造了热点，接下来你懂的!</b></text>
       </div>
       <div style="height: 5vh;"></div>
     </div>

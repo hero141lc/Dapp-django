@@ -82,7 +82,7 @@ def create(request):
     cookie_value['priceNow']=Prices.objects.filter(Token=brickOb).last().price
     print( cookie_value['priceNow'])
     cookie_value['market']=round(int(res['token_1']['reserve'])*cookie_value['priceNow']/1e18,2)
-    cookie_value['priceNow']=round(cookie_value['priceNow']*1e7,2)
+    cookie_value['priceNow']=round(cookie_value['priceNow'],7)
     #priceList
     cookie_value['price_list']=Prices.objects.filter(Token=brickOb)
     
