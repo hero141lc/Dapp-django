@@ -355,7 +355,7 @@ def getOrder(address):
         'maifeiMax':maifeiMax,
     }
     end_time = time.time()
-    print("Important:Result耗时: {:.2f}秒".format(end_time - start_time))
+    print("Important:Result: {:.2f}S".format(end_time - start_time))
     return context
 def howManyHoulder():
     token_addr="0xc4893fEa8547Fb1A4D860518285AF6655424645f"
