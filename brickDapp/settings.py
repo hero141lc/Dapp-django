@@ -73,7 +73,7 @@ WSGI_APPLICATION = 'brickDapp.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
+'''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -91,14 +91,14 @@ DATABASES = {
         # 账号
         'PASSWORD': 'yBYDcapFTd8faZ62',
          # 密码
-        'HOST': '209.141.51.20', 
+        'HOST': '209.141.52.20', 
         # HOST
         'POST': 3306, 
         # 端口
 
     }
 }
-'''
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
