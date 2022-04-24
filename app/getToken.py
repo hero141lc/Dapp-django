@@ -219,6 +219,7 @@ def getOrder(address):
     pixiuKing=[0,0,'']
 
     for item in data:
+        print("item-data:".item)
         if item['contractAddress']!=None and item['contractAddress'] in ban_token:
             continue
         if item['from'] == address:
