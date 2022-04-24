@@ -37,8 +37,8 @@ https://api.bscscan.com/api?module=account&action=tokentx&&address=0x6A3FD03803a
 create页面市值有问题
 BNB
 
-apt-get install python3-dev
-
+apt-get install python3-dev python3-pip
+pip3 install django web3 pymysql rx requests python-dateutil uwsgi mysqlclient sqlalchemy
 升级貔貅机器人
 数字问题，maifei
 服务器激活

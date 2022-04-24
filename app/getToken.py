@@ -15,9 +15,11 @@ from .models import Token,Prices,Trans,Wallet
 from django.db.models import Q,Max
 from web3 import Web3
 import time
+from multiprocessing.pool import ThreadPool
+import multiprocessing
 pancakeAddr='0x10ed43c718714eb63d5aa57b78b54704e256024e'
 
-start_time = time.time()
+
 #returns a address the trading pairs on pancake
 #基础币 如:wbnb，usdt,busd
 WETH = '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c'
@@ -44,6 +46,7 @@ def getPair(token_addr, baseaddr):
     return factory_contract.functions.getPair(WETH,token_addr).call()
 
 def piXiu(token_address):
+    start_time = time.time()
     try:
         #Ban Busd 
         if token_address=='0xe9e7cea3dedca5984780bafc599bd69add087d56':
@@ -78,6 +81,7 @@ def piXiu(token_address):
         
 #常规检测貔貅
 def isPixiu(token_address):
+    start_time = time.time()
     try:
         tokenOb=Token.objects.get(token_address)
         end_time = time.time()
@@ -134,6 +138,7 @@ bit0xc864019047b864b6ab609a968ae2725dfaee808a
 '''
 
 def newData(contenst,yearsAgo,toDate):
+    start_time = time.time()
     #fromDate = '2022-03-14'
     #toDate = '2022-04-15'
     URL = 'https://api.covalenthq.com/v1/pricing/historical_by_addresses_v2/56/USD/'+contenst+'/?from='+yearsAgo+'&to='+toDate+'&prices-at-asc=true&page-size=1000&key=ckey_c95724e05a2f4802a387160b08e'
@@ -153,6 +158,7 @@ def newData(contenst,yearsAgo,toDate):
     print("Important:newData: {:.2f}S".format(end_time - start_time))
     return tokenOb
 def getData(tokenOb,fromDate,toDate):
+    start_time = time.time()
     #fromDate = '2022-03-14'
     #toDate = '2022-04-15'
     URL = 'https://api.covalenthq.com/v1/pricing/historical_by_addresses_v2/56/USD/'+tokenOb.address+'/?from='+fromDate+'&to='+toDate+'&prices-at-asc=true&page-size=1000&key=ckey_c95724e05a2f4802a387160b08e'
@@ -166,6 +172,7 @@ def getData(tokenOb,fromDate,toDate):
     return tokenOb
 
 def exSql(contenst):
+    start_time = time.time()
     timeNow=datetime.datetime.now()
     toDate=timeNow.date().isoformat()
     try:
@@ -193,7 +200,7 @@ def exSql(contenst):
     print("Important:exSql: {:.2f}S".format(end_time - start_time))
     return data
 def getOrder(address):
-    
+    start_time = time.time()
     address=address.strip().replace('\n', '').replace('\r', '').lower()
     addressRes='address='+address
     Token='contractaddress='
@@ -236,6 +243,7 @@ def getOrder(address):
        
         if  type(item) is not dict:
             print("item-data:",type(item),item)
+            time.sleep(200)
             continue
     
         if item['contractAddress']!=None and item['contractAddress'] in ban_token:
@@ -256,8 +264,10 @@ def getOrder(address):
     print("Important:Foreach Item: {:.2f}S".format(end_time - start_time))
     bossList=fromNameList&toNameList
     #print(bossList,fromNameList,toNameList)
+    pool = ThreadPool(multiprocessing.cpu_count())
+    pool.map(exSql, bossList)
     for i in bossList:
- 
+        
         toeknOb=exSql(i)
         if toeknOb==1:
             break
@@ -335,7 +345,6 @@ def getOrder(address):
             if k['price']>pixiuKing[1]:
                 pixiuKing[1]=k['price']
                 pixiuKing[2]=k['name']
-            break
         for s,m in newFromDict.items():
             if j == s:
                 coninProfits=newToDict[j]['price']-newFromDict[j]['price']
@@ -375,12 +384,13 @@ def getOrder(address):
         'howManyPixiu':pixiuKing[0],
         'piXiuName':pixiuKing[2],
         'piXiuPrice':abs(int(pixiuKing[1]/1e19)),
-        'maifeiMax':maifeiMax,
+        'maifeiMax':abs(int(maifeiMax/1e19)),
     }
     end_time = time.time()
     print("Important:Result: {:.2f}S".format(end_time - start_time))
     return context
 def howManyHoulder():
+    start_time = time.time()
     token_addr="0xc4893fEa8547Fb1A4D860518285AF6655424645f"
     url="https://api.covalenthq.com/v1/56/tokens/"+token_addr+"/token_holders/?quote-currency=USD&format=JSON&page-number=0&page-size=100000&key=ckey_c95724e05a2f4802a387160b08e"
     r = requests.get(url)
