@@ -5,3 +5,5 @@ rx
 requests
 python-dateutil
 uwsgi
+mysqlclient
+sqlalchemy
