@@ -17,7 +17,7 @@ from web3 import Web3
 import time
 pancakeAddr='0x10ed43c718714eb63d5aa57b78b54704e256024e'
 
-
+start_time = time.time()
 #returns a address the trading pairs on pancake
 #基础币 如:wbnb，usdt,busd
 WETH = '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c'
@@ -60,6 +60,8 @@ def piXiu(token_address):
 
         result = detectFee(pairAddr, checksumed_token_address, WETH)
         print(result,type(result))
+        end_time = time.time()
+        print("Important:piXiu: {:.2f}S".format(end_time - start_time))
         if result==None or len(result)!=2:
             print("unsellable")
             return 1
@@ -70,18 +72,24 @@ def piXiu(token_address):
         else:
             print(result)
             return 0
+    
     except:
         return 0
+        
 #常规检测貔貅
 def isPixiu(token_address):
     try:
         tokenOb=Token.objects.get(token_address)
+        end_time = time.time()
+        print("Important:isPixiu: {:.2f}S".format(end_time - start_time))
         if tokenOb.pixiu == True:
             return 1
         else:
             return 0
     except:
         tokenOb=exSql(token_address)
+        end_time = time.time()
+        print("Important:isPixiu: {:.2f}S".format(end_time - start_time))
         if tokenOb.pixiu == True:
             return 1
         else:
@@ -141,6 +149,8 @@ def newData(contenst,yearsAgo,toDate):
     for item in priceList:
         Prices.objects.create(date=datetime.datetime.strptime(item['date'][0:10], "%Y-%m-%d"),price=item['price'], Token=tokenOb)
     print('New Coin Added Successed:',data['contract_ticker_symbol'],data['update_at'])
+    end_time = time.time()
+    print("Important:newData: {:.2f}S".format(end_time - start_time))
     return tokenOb
 def getData(tokenOb,fromDate,toDate):
     #fromDate = '2022-03-14'
@@ -151,6 +161,8 @@ def getData(tokenOb,fromDate,toDate):
     data=json.loads(res)['data'][0]['prices']
     for item in data:
         Prices.objects.create(date=datetime.datetime.strptime(item['date'][0:10], "%Y-%m-%d"),price=item['price'], Token=tokenOb)
+    end_time = time.time()
+    print("Important:getData: {:.2f}S".format(end_time - start_time))
     return tokenOb
 
 def exSql(contenst):
@@ -177,9 +189,11 @@ def exSql(contenst):
 
     # 发送 GET 方式的请求，并把返回的结果(响应)存储在 res 变量里头
     # 答第二个问题，get() 方法需要输入一个网页链接
+    end_time = time.time()
+    print("Important:exSql: {:.2f}S".format(end_time - start_time))
     return data
 def getOrder(address):
-    start_time = time.time()
+    
     address=address.strip().replace('\n', '').replace('\r', '').lower()
     addressRes='address='+address
     Token='contractaddress='
@@ -376,5 +390,7 @@ def howManyHoulder():
     l=len(holders)
     print("brick holders count:")
     print(l)
+    end_time = time.time()
+    print("howManyHoulder: {:.2f}S".format(end_time - start_time))
     return l
 
