@@ -238,7 +238,8 @@ def getOrder(address):
             item['value']=int(item['value'])            
             item['time']=datetime.datetime.fromtimestamp(int(item['timeStamp']))
             toList.append(item)
-
+    end_time = time.time()
+    print("Important:Foreach Item: {:.2f}S".format(end_time - start_time))
     bossList=fromNameList&toNameList
     #print(bossList,fromNameList,toNameList)
     for i in bossList:
@@ -281,7 +282,7 @@ def getOrder(address):
                             print("contractAddress:",item2['contractAddress'])
                             print("tokenSymbol",item2['tokenSymbol'])
 
-                        break
+               
             for item2 in toList:
                 if item2['contractAddress'] == toeknOb.address and 'LP' not in item2['tokenSymbol']:
                    
@@ -303,7 +304,9 @@ def getOrder(address):
                             }
                         else:
                             a['price']+=item2['price']
-                        break
+            
+    end_time = time.time()
+    print("Important:Foreach BOsslist: {:.2f}S".format(end_time - start_time))
     profits=toMoney-fromMoney
     print(newFromDict)
     print(newToDict)
@@ -334,6 +337,8 @@ def getOrder(address):
                 if coninProfits<profitsMin:
                     profitsMin=coninProfits
                     minName=newFromDict[j]['name']
+    end_time = time.time()
+    print("Important:Foreach NewTolist: {:.2f}S".format(end_time - start_time))
     months=12
     brickDays=int(profits/1e19/32)
     if profits>0:
