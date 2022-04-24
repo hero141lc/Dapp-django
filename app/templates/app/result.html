@@ -12,6 +12,9 @@
 </head>
 {% load static %} 
 <script>
+  window.οnlοad=function(){
+    document.getElementById('loading').style="display:none";
+  }
   var but=document.getElementById('sub');
   var temp=0; //0为显示
   function hide(){
