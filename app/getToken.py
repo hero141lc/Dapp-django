@@ -220,7 +220,7 @@ def getOrder(address):
 
     for item in data:
         print("item-data:",item)
-        continue
+    
         if item['contractAddress']!=None and item['contractAddress'] in ban_token:
             continue
         if item['from'] == address:
