@@ -36,3 +36,5 @@ https://api.bscscan.com/api?module=account&action=tokentx&&address=0x6A3FD03803a
 
 create页面市值有问题
 BNB
+
+apt-get install python3-dev
