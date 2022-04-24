@@ -6,16 +6,13 @@ class posterapi():
     def __init__(self, endpoint: str, token: str):
         if endpoint.endswith("/"):
             endpoint = endpoint[0:-1]
-        #self.endpoint = endpoint
-        self.endpoint ='http://brickcn.xyz:5000'
+        self.endpoint = endpoint
         self.token = token
 
     def getUrl(self, posterId: str, params: dict = {}):
         params = dict(params)
         params['id'] = posterId
-        #url = f"{self.endpoint}/api/link"
-        #修改地址
-        url = "http://brickcn.xyz:5000/api/link"
+        url = f"{self.endpoint}/api/link"
         headers = {
             'Content-Type': 'application/json',
             'token': self.token
@@ -23,12 +20,9 @@ class posterapi():
         payload = json.dumps(params)
         response = requests.request("POST", url, headers=headers, data=payload)
         link = response.json()['data']['url']  # type:str
-        link='http://brickcn.xyz:5000/'+link[link.index('v'):]
         if not link.startswith('http'):
             link = self.endpoint + link
-            print('self.endpoint',self.endpoint)
         self.link = link
-        print(self.link)
         return link
 
     def save(self, filename='tmp.jpg'):
@@ -37,7 +31,7 @@ class posterapi():
             f.write(response.content)
 
 def win(paramsa):
-    api = posterapi('http://brickcn.xyz:5000/', 'ApfrIzxCoK1DwNZOEJCwlrnv6QZ0PCdv')
+    api = posterapi('http://poster.brickcn.xyz:5000/', 'ApfrIzxCoK1DwNZOEJCwlrnv6QZ0PCdv')
     paramsa = eval(paramsa['context'])
     #str(paramsa['times'])
     #params["profits"]=str(paramsa["profits"])
@@ -53,8 +47,8 @@ def win(paramsa):
     params["maifeiPeak"]=str(paramsa["maifeiPeak"])+'$'
 
     url = api.getUrl('9', params)
-    print(url)
-    return url
+    print(url+'.jpg')
+    return url+'.jpg'
     #api.save()
 def lose(paramsa):
     api = posterapi('http://brickcn.xyz:5000/', 'ApfrIzxCoK1DwNZOEJCwlrnv6QZ0PCdv')
@@ -82,8 +76,8 @@ def lose(paramsa):
     params["maifeiPeak"]="0$"
     '''
     url = api.getUrl('8', params)
-    print(url)
-    return url
+    print(url+'.jpg')
+    return url+'.jpg'
 if __name__ == '__main__':
     win()
     lose()

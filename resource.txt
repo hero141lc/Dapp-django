@@ -1,0 +1,6 @@
+django
+web3
+pymysql
+rx
+requests
+python-dateutil

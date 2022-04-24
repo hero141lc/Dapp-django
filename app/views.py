@@ -60,8 +60,14 @@ def result(request):
     return response
 
 def create(request):
+    url='https://api.covalenthq.com/v1/56/networks/pancakeswap_v2/assets/?quote-currency=USD&format=JSON&contract-addresses=0xc4893fEa8547Fb1A4D860518285AF6655424645f&key=ckey_cd901996858f4187b44f93aadac'
+    res = json.loads(requests.get(url).text)['data']['items'][0]
+    # 发送 GET 方式的请求，并把返回的结果(响应)存储在 res 变量里头
+    # 答第二个问题，get() 方法需要输入一个网页链接
+    
     cookies = request.COOKIES
     print(cookies)
+    print(res)
     for cookie_key,cookie_value in cookies.items():
         print(cookie_key,cookie_value)
     cookie_value=eval(cookie_value)
@@ -70,8 +76,20 @@ def create(request):
     else:
         posterUrl=lose(cookies)
     cookie_value['posterUrl']=posterUrl
+    cookie_value['houlders']=howManyHoulder()
     # K line
     brickOb=exSql('0xc4893fea8547fb1a4d860518285af6655424645f')
+    cookie_value['priceNow']=Prices.objects.filter(Token=brickOb).last().price
+    print( cookie_value['priceNow'])
+    cookie_value['market']=round(int(res['token_1']['reserve'])*cookie_value['priceNow']/1e18,2)
+    cookie_value['priceNow']=round(cookie_value['priceNow']*1e7,2)
     #priceList
+    cookie_value['price_list']=Prices.objects.filter(Token=brickOb)
+    
+ 
+    for i in cookie_value['price_list']:
+        i.date=i.date.date().isoformat()
+    cookie_value['swap_count_24h']=res['swap_count_24h']
+    cookie_value['reserve']=round(int(res['token_0']['reserve'])/1e18,2)
     return render(request, 'app/create.html',cookie_value)
 

@@ -33,7 +33,8 @@ factory_contract = web3.eth.contract(address=factory_address, abi=factory_abi)
 bot_abi = json.loads('[{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"pairAddr","type":"address"},{"internalType":"address","name":"tokenAddr","type":"address"},{"internalType":"address","name":"_WETH","type":"address"},{"internalType":"uint256","name":"wbnbAmountIn","type":"uint256"}],"name":"detectFee","outputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"pairAddr","type":"address"},{"internalType":"address","name":"tokenAddr","type":"address"},{"internalType":"address","name":"_WETH","type":"address"},{"internalType":"uint256","name":"wbnbAmountIn","type":"uint256"}],"name":"detectGas","outputs":[{"internalType":"uint256","name":"gasUsedOfBuy","type":"uint256"},{"internalType":"uint256","name":"gasUsedOfSell","type":"uint256"}],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amountOut","type":"uint256"}],"name":"withdrawBNB","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"amountOut","type":"uint256"}],"name":"withdrawToken","outputs":[],"stateMutability":"payable","type":"function"}]')
 bot_address = '0x4780B172B24cE1fC9e63A4A61378080de4B029B5'
 bot_contract = web3.eth.contract(address=bot_address, abi=bot_abi)
-
+ban_token = ['0xe9e7cea3dedca5984780bafc599bd69add087d56','0x55d398326f99059ff775485246999027b3197955','0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c','0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d','0x1af3f329e8be154074d8769d1ffa4ee058b1dbc3','0x2170ed0880ac9a755fd29b2688956bd959f933f8'
+]
 def detectFee(pair_addr,token_addr,base_token_addr):
     return bot_contract.functions.detectFee(pair_addr,token_addr,base_token_addr,10000000000000000).call()
 
@@ -168,7 +169,10 @@ def exSql(contenst):
             return tokenOb
     except:
         yearsAgo=(timeNow-datetime.timedelta(days=365)).date().isoformat()
-        data=newData(contenst,yearsAgo,toDate)
+        try: 
+            data=newData(contenst,yearsAgo,toDate)
+        except:
+            data=Token.objects.get(address=contenst)
 
     # 发送 GET 方式的请求，并把返回的结果(响应)存储在 res 变量里头
     # 答第二个问题，get() 方法需要输入一个网页链接
@@ -213,7 +217,8 @@ def getOrder(address):
     pixiuKing=[0,0,'']
 
     for item in data:
-
+        if item['contractAddress'] in ban_token:
+            continue
         if item['from'] == address:
 
             fromNameList.add(item['contractAddress'])
@@ -233,9 +238,9 @@ def getOrder(address):
  
         toeknOb=exSql(i)
         priceOb=Prices.objects.filter(Token=toeknOb).values()
-        for item in priceOb:
+        for item  in priceOb:
             for item2 in fromList:
-                if item2['contractAddress'] == toeknOb.address:
+                if item2['contractAddress'] == toeknOb.address and 'LP' not in item2['tokenSymbol']:
                     if item2['time'].date()==item['date'].date():
                         try:
                             item2['price']=int(item2['value']*item['price'])
@@ -269,7 +274,7 @@ def getOrder(address):
 
                         break
             for item2 in toList:
-                if item2['contractAddress'] == toeknOb.address:
+                if item2['contractAddress'] == toeknOb.address and 'LP' not in item2['tokenSymbol']:
                    
                     if item2['time'].date()==item['date'].date():
                     
@@ -345,3 +350,15 @@ def getOrder(address):
         'maifeiMax':maifeiMax,
     }
     return context
+def howManyHoulder():
+    token_addr="0xc4893fEa8547Fb1A4D860518285AF6655424645f"
+    url="https://api.covalenthq.com/v1/56/tokens/"+token_addr+"/token_holders/?quote-currency=USD&format=JSON&page-number=0&page-size=100000&key=ckey_c95724e05a2f4802a387160b08e"
+    r = requests.get(url)
+
+    data=r.json()
+    holders=data["data"]["items"]
+    l=len(holders)
+    print("brick holders count:")
+    print(l)
+    return l
+
