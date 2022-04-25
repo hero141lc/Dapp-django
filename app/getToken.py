@@ -227,11 +227,12 @@ def filterToFrom(item):
         return 1
 
     userWalletAddress = item["userAddress"]
+    userWalletAddress = userWalletAddress.lower()
 
-    if userWalletAddress == item['to'] and isLP(Web3.toChecksumAddress(item['from'])):
+    if userWalletAddress == item['to'].lower() and isLP(Web3.toChecksumAddress(item['from'])):
         return item
 
-    if userWalletAddress == item['from'] and isLP(Web3.toChecksumAddress(item['to'])):
+    if userWalletAddress == item['from'].lower() and isLP(Web3.toChecksumAddress(item['to'])):
         return item
 
     return 1
