@@ -353,7 +353,7 @@ def getOrder(address):
                     'address':j,
                     'price':coninProfits,
                 }
-                print("coninProfits>profitsMax",newToDict[j],newFromDict[j],coninProfits,profitsMax)
+                #print("coninProfits>profitsMax",newToDict[j],newFromDict[j],coninProfits,profitsMax)
                 if coninProfits>profitsMax:
                     profitsMax=coninProfits
                     maxName=newFromDict[j]['name']
