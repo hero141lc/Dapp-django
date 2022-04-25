@@ -12,7 +12,7 @@ import json
 from unittest import result
 import requests
 import datetime
-from .models import Token,Prices,Trans,Wallet
+from .models import Token,Prices,Trans,Wallet,Lp
 from django.db.models import Q,Max
 from web3 import Web3
 import time
@@ -113,14 +113,20 @@ def isPixiu(token_address):
 # Is_LP
 
 def isLP(adderss):
-	contract = web3.eth.contract(address=address, abi=isLP_abi)
-	#need to put .call() at the end to call the smart contract
-	symbol = contract.functions.symbol().call()
-	print(symbol)
-	if symbol=="Cake-LP":
-		return True
-	else:
-		return False
+    addressLow=adderss.lower()
+    try:
+        Lp.objects.get(address=adderss)
+        return True
+    except:
+        contract = web3.eth.contract(address=adderss, abi=isLP_abi)
+        #need to put .call() at the end to call the smart contract
+        symbol = contract.functions.symbol().call()
+        print(symbol)
+        if symbol=="Cake-LP":
+            Lp.objects.create(address=adderss,symbol=symbol)
+            return True
+        else:
+            return False
 def test():
     print('sauhuiuadhiwaudh')
     return 0
@@ -229,7 +235,7 @@ def filterToFrom(item):
         time.sleep(200)
         return 1
 
-    if item['contractAddress']!=None and item['contractAddress'] in ban_token and isLP(item['contractAddress']):
+    if item['contractAddress']!=None and item['contractAddress'] in ban_token and isLP( Web3.toChecksumAddress(item['contractAddress'])):
         
         return 1
     if item['from'] == getAddres:
@@ -360,14 +366,12 @@ def getOrder(address):
                         else:
                             a['price']+=item2['price']
     #First buying Coin 
-    print(toList)
     toList.sort(key=lambda x:x['time'])
     for item2 in toList:
         if 'price' in item2.keys():
             latestItem=item2
             latestItem['firstTime']=str(latestItem['time'].date().isoformat())
             break
-    print("latestItem['firstTime']",latestItem['firstTime'])
     end_time = time.time()
     print("Important:Foreach BOsslist: {:.2f}S".format(end_time - start_time))
     profits=toMoney-fromMoney
@@ -425,7 +429,7 @@ def getOrder(address):
         'maifeiMax':abs(int(maifeiMax/1e19)),
         'firstCoin':latestItem['tokenSymbol'],
         'firstTime':latestItem['firstTime'],
-        'firstPrice':latestItem['price']/1e19,
+        'firstPrice':round(latestItem['price']/1e19,2),
     }
     end_time = time.time()
     print("Important:Result: {:.2f}S".format(end_time - start_time))

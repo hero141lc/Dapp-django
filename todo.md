@@ -43,3 +43,7 @@ pip3 install django web3 pymysql rx requests python-dateutil uwsgi mysqlclient s
 数字问题，maifei
 服务器激活
 收益是0直接去掉
+
+
+存储厂家代币
+LpLp需要优化

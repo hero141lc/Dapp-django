@@ -14,8 +14,11 @@ class Token(models.Model):
     update_at = models.DateTimeField(default = timezone.now)
     quote_currency = models.CharField(max_length=20,null=True, blank=True)
     pixiu=models.BooleanField(null=True, blank=True)
+    isLp=models.BooleanField(null=True, blank=True)
     pub_date = models.DateTimeField('date published',auto_now = True)
-
+class Lp(models.Model):
+    symbol=models.CharField(max_length=50,null=True, blank=True)
+    address= models.CharField(max_length=50,unique=True,primary_key=True)
 class Prices(models.Model):
     Token = models.ForeignKey(Token, on_delete=models.CASCADE)
     date = models.DateTimeField(default = timezone.now)
