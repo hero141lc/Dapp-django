@@ -1,5 +1,6 @@
 import requests
 import json
+import time
 
 class posterapi():
 
@@ -10,9 +11,11 @@ class posterapi():
         self.token = token
 
     def getUrl(self, posterId: str, params: dict = {}):
+        start_time = time.time()
         params = dict(params)
         params['id'] = posterId
-        url = f"{self.endpoint}/api/link"
+        url = "{self.endpoint}/api/link"
+        print("getUrl:",url)
         headers = {
             'Content-Type': 'application/json',
             'token': self.token
@@ -23,6 +26,9 @@ class posterapi():
         if not link.startswith('http'):
             link = self.endpoint + link
         self.link = link
+        end_time = time.time()
+        print("geturl const: {:.2f}s".format(end_time - start_time))
+s
         return link
 
     def save(self, filename='tmp.jpg'):
