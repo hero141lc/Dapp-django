@@ -225,9 +225,10 @@ def exSql(contenst):
 def filterToFrom(item):
  
     if item['contractAddress']!=None and item['contractAddress'] in ban_token:
-        print("Is LP or None")
+        print("Is None")
         return 1
     if isLP( Web3.toChecksumAddress(item['contractAddress'])):
+        print("Is Lp")
         return item
     return 1
 def getOrder(address):
@@ -273,7 +274,7 @@ def getOrder(address):
     pixiuKing=[0,0,'']
     latestItem={}
     pool = ThreadPool(multiprocessing.cpu_count())
-    data=pool.map(filterToFrom, data)
+    data=filter(lambda x : x != 1,pool.map(filterToFrom, data))
     for item in data:
         if  type(item) is not dict:
             print("item-data:",type(item),item)
