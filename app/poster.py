@@ -14,8 +14,8 @@ class posterapi():
         start_time = time.time()
         params = dict(params)
         params['id'] = posterId
-        url = "{self.endpoint}/api/link"
-        print("getUrl:",url)
+        url = f"{self.endpoint}/api/link"
+        #print("getUrl:",url)
         headers = {
             'Content-Type': 'application/json',
             'token': self.token
