@@ -41,18 +41,20 @@ def win(paramsa):
     paramsa = eval(paramsa['context'])
     #str(paramsa['times'])
     #params["profits"]=str(paramsa["profits"])
- 
     params = {}
     params["times"]=str(paramsa["times"])
     params["profits"]=str(paramsa["profits"])+'$'
     params["brickDays"]=str(paramsa["brickDays"])
-    params["howManyPixiu"]=str(paramsa["howManyPixiu"])
-    params["piXiuName"]=str(paramsa["piXiuName"])
+    params["firstTime"]=str(paramsa["firstTime"])
+    params["firstCoin"]=str(paramsa["firstCoin"])
     params["maifeiMax"]=str(paramsa["maifeiMax"])+'$'
     params["maifeiWho"]=str(paramsa["maifeiWho"])
     params["maifeiPeak"]=str(paramsa["maifeiPeak"])+'$'
+    params["firstPrice"]=str(paramsa["firstPrice"])+'$'
 
-    url = api.getUrl('9', params)
+
+    
+    url = api.getUrl('11', params)
     print(url+'.jpg')
     return url+'.jpg'
     #api.save()
@@ -63,23 +65,13 @@ def lose(paramsa):
     params["times"]=str(paramsa["times"])
     params["profits"]=str(paramsa["profits"])+'$'
     params["brickDays"]=str(paramsa["brickDays"])
-    if "profitsMin" in params:
-        params["profitsMin"]=str(params["profitsMin"])+'$'
-    else:
-        params["profitsMin"]="0$"
-    params["howManyPixiu"]="0$"
-    params["piXiuName"]="0$"
-    params["piXiuPrice"]="0$"
+    params["firstTime"]=str(paramsa["firstTime"])
+    params["firstCoin"]=str(paramsa["firstCoin"])
+    params["maifeiMax"]=str(paramsa["maifeiMax"])+'$'
+    params["maifeiWho"]=str(paramsa["maifeiWho"])
+    params["maifeiPeak"]=str(paramsa["maifeiPeak"])+'$'
+    params["firstPrice"]=str(paramsa["firstPrice"])+'$'
 
-    if "maifeiWho" in params:
-        params["maifeiWho"]=str(params["maifeiWho"])
-    else:
-        params["maifeiWho"]=""
-
-    if "maifeiPeak" in params:
-        params["maifeiPeak"]=str(params["maifeiPeak"])+'$'
-    else:
-        params["maifeiPeak"]="0$"    
     
     '''
     params = {}
@@ -93,7 +85,7 @@ def lose(paramsa):
     params["maifeiWho"]="Null"
     params["maifeiPeak"]="0$"
     '''
-    url = api.getUrl('8', params)
+    url = api.getUrl('12', params)
     print(url+'.jpg')
     return url+'.jpg'
 if __name__ == '__main__':
