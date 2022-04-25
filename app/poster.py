@@ -47,7 +47,7 @@ def win(paramsa):
     params["brickDays"]=str(paramsa["brickDays"])
     params["firstTime"]=str(paramsa["firstTime"])
     params["firstCoin"]=str(paramsa["firstCoin"])
-    params["maifeiMax"]=str(paramsa["maifeiMax"])+'$'
+    params["maifeiMax"]=str(paramsa["buyAmountOfMax_Maifei"])+'$'
     params["maifeiWho"]=str(paramsa["maifeiWho"])
     params["maifeiPeak"]=str(paramsa["maifeiPeak"])+'$'
     params["firstPrice"]=str(paramsa["firstPrice"])+'$'
@@ -67,7 +67,7 @@ def lose(paramsa):
     params["brickDays"]=str(paramsa["brickDays"])
     params["firstTime"]=str(paramsa["firstTime"])
     params["firstCoin"]=str(paramsa["firstCoin"])
-    params["maifeiMax"]=str(paramsa["maifeiMax"])+'$'
+    params["maifeiMax"]=str(paramsa["buyAmountOfMax_Maifei"])+'$'
     params["maifeiWho"]=str(paramsa["maifeiWho"])
     params["maifeiPeak"]=str(paramsa["maifeiPeak"])+'$'
     params["firstPrice"]=str(paramsa["firstPrice"])+'$'
