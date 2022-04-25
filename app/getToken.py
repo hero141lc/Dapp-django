@@ -351,6 +351,8 @@ def getOrder(address):
                 #and 'LP' not in buyTrx['tokenSymbol']:
                     if buyTrx['time'].date()==dailyPrice['date'].date():
                         try:
+                            
+                            buyTrx['amount']=int(buyTrx['value']*dailyPrice['price'])
                             peakPrice=Prices.objects.filter(Q(Token=toeknObject)&Q(date__gt=dailyPrice['date'])).aggregate(Max('price'))['price__max']
                             
                             #Maifei
