@@ -12,6 +12,8 @@ import json
 from unittest import result
 import requests
 import datetime
+
+from sqlalchemy import false
 from .models import Token,Prices,Trans,Wallet,Lp
 from django.db.models import Q,Max
 from web3 import Web3
@@ -107,19 +109,22 @@ def isPixiu(token_address):
 # Is_LP
 
 def isLP(adderss):
-    addressLow=adderss.lower()
+
     try:
         Lp.objects.get(address=adderss)
         return True
     except:
-        contract = web3.eth.contract(address=adderss, abi=isLP_abi)
-        #need to put .call() at the end to call the smart contract
-        symbol = contract.functions.symbol().call()
-        print(symbol)
-        if symbol=="Cake-LP":
-            Lp.objects.create(address=adderss,symbol=symbol)
-            return True
-        else:
+        try:
+            contract = web3.eth.contract(address=adderss, abi=isLP_abi)
+            #need to put .call() at the end to call the smart contract
+            symbol = contract.functions.symbol().call()
+            print(symbol)
+            if symbol=="Cake-LP":
+                Lp.objects.create(address=adderss,symbol=symbol)
+                return True
+            else:
+                return False
+        except:
             return False
 def test():
     print('sauhuiuadhiwaudh')
@@ -173,6 +178,8 @@ def newData(contenst,yearsAgo,toDate):
     start_time = time.time()
     #fromDate = '2022-03-14'
     #toDate = '2022-04-15'
+    if contenst == '0x94c168468c2ac83073fb1794a66992e4f41ee7bb':
+        print('dd')
     URL = 'https://api.covalenthq.com/v1/pricing/historical_by_addresses_v2/56/USD/'+contenst+'/?from='+yearsAgo+'&to='+toDate+'&prices-at-asc=true&page-size=1000&key=ckey_c95724e05a2f4802a387160b08e'
     # 输入在浏览器的网址
     res = requests.get(URL).text
@@ -247,11 +254,12 @@ def filterToFrom(item):
 
     userWalletAddress = item["userAddress"]
     userWalletAddress = userWalletAddress.lower()
-
-    if userWalletAddress == item['to'].lower() and isLP(Web3.toChecksumAddress(item['from'])):
+    print("item['from'],item['to']")
+    print(item['from'],item['to'])
+    if userWalletAddress == item['to'].lower() and isLP(web3.toChecksumAddress(item['from'])):
         return item
 
-    if userWalletAddress == item['from'].lower() and isLP(Web3.toChecksumAddress(item['to'])):
+    if userWalletAddress == item['from'].lower() and isLP(web3.toChecksumAddress(item['to'])):
         return item
 
     return 1
@@ -279,7 +287,7 @@ def getOrder(address):
     pricesList=[]
     income=0
     expenditure=0
-    times=len(data) +1
+    times=0
     maxName=''
     minName=''
     maxBuyAmount=0
@@ -304,22 +312,22 @@ def getOrder(address):
         item["userAddress"] = address
 
     pool = ThreadPool(multiprocessing.cpu_count())
-    data=filter(lambda x : x != 1,pool.map(filterToFrom, data))
-
+    data=pool.map(filterToFrom, data)
+    
     #parse all transactions && dispatch trx to right category.
     for item in data:
         if  type(item) is not dict:
             print("item-data:",type(item),item)
-            time.sleep(200)
             continue
+        times+=1
         #sell token to pancake(pair)
-        if item['from'] == userWalletAddress:
+        if item['from'] == address:
             sellTokenList.add(item['contractAddress'])
             item['value']=int(item['value'])
             item['time']=datetime.datetime.fromtimestamp(int(item['timeStamp']))
             sellTrxList.append(item)
         #buy token from pancake
-        elif item['to'] == userWalletAddress:
+        elif item['to'] == address:
             buyTokenList.add(item['contractAddress'])
             item['value']=int(item['value'])            
             item['time']=datetime.datetime.fromtimestamp(int(item['timeStamp']))
@@ -339,6 +347,7 @@ def getOrder(address):
         #query token info from mysql.
         toeknObject=exSql(_token)
         if toeknObject==1:
+            print("ERROR",toeknObject)
             break
         
         # get price of the token pre day.
@@ -350,6 +359,7 @@ def getOrder(address):
                 #and 'LP' not in buyTrx['tokenSymbol']:
                     if buyTrx['time'].date()==dailyPrice['date'].date():
                         try:
+                            print("buyTrx['value']",buyTrx['value'],dailyPrice['price'],buyTrx['time'])
                             buyTrx['amount']=int(buyTrx['value']*dailyPrice['price'])
                         
                             peakPrice=Prices.objects.filter(Q(Token=toeknObject)&Q(date__gt=dailyPrice['date'])).aggregate(Max('price'))['price__max']
@@ -449,23 +459,23 @@ def getOrder(address):
     context={
         'months':months,
         'times':times,
-        'profitsMax':abs(int(profitsMax/1e19)),
-        'profitsMin':abs(int(profitsMin/1e19)),
+        'profitsMax':abs(int(profitsMax/1e18)),
+        'profitsMin':abs(int(profitsMin/1e18)),
         'minName':minName,
         'maxName':maxName,
         'brickDays':abs(int(brickDays)),
         'maifeiWho':maxMaifeiCoin,
-        'maifeiPeak':abs(int(maifeiPeak/1e19)),
-        'profits':abs(int(profits/1e19)),
-        'maifei':abs(int(maifeiAll/1e19)),
+        'maifeiPeak':abs(int(maifeiPeak/1e18)),
+        'profits':abs(int(profits/1e18)),
+        'maifei':abs(int(maifeiAll/1e18)),
         'winne':winne,
         'howManyPixiu':pixiuKing[0],
         'piXiuName':pixiuKing[2],
-        'piXiuPrice':abs(int(pixiuKing[1]/1e19)),
-        'buyAmountOfMax_Maifei':abs(int(buyAmountOfMax_Maifei/1e19)),
+        'piXiuPrice':abs(int(pixiuKing[1]/1e18)),
+        'buyAmountOfMax_Maifei':abs(int(buyAmountOfMax_Maifei/1e18)),
         'firstCoin':latestItem['tokenSymbol'],
         'firstTime':latestItem['firstTime'],
-        'firstPrice':round(latestItem['price']/1e19,2),
+        'firstPrice':round(latestItem['amount'],2),
     }
     end_time = time.time()
     print("Important:Result: {:.2f}S".format(end_time - start_time))
