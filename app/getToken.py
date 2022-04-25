@@ -304,7 +304,7 @@ def getOrder(address):
     for item in data:
         item["userAddress"] = address
 
-    pool = ThreadPool(multiprocessing.cpu_count()*50)
+    pool = ThreadPool(multiprocessing.cpu_count()*10)
     data=pool.map(filterToFrom, data)
     
     #parse all transactions && dispatch trx to right category.
