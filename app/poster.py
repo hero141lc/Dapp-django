@@ -64,8 +64,17 @@ def lose(paramsa):
     params["howManyPixiu"]="0$"
     params["piXiuName"]="0$"
     params["piXiuPrice"]="0$"
-    params["maifeiWho"]=str(params["maifeiWho"])
-    params["maifeiPeak"]=str(params["maifeiPeak"])+'$'
+
+    if "maifeiWho" in params:
+        params["maifeiWho"]=str(params["maifeiWho"])
+    else:
+        params["maifeiWho"]=""
+
+    if "maifeiPeak" in params:
+        params["maifeiPeak"]=str(params["maifeiPeak"])+'$'
+    else:
+        params["maifeiPeak"]="0$"    
+    
     '''
     params = {}
     params["times"]="0"
