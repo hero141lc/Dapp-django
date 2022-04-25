@@ -57,7 +57,10 @@ def lose(paramsa):
     params["times"]=str(paramsa["times"])
     params["profits"]=str(paramsa["profits"])+'$'
     params["brickDays"]=str(paramsa["brickDays"])
-    params["profitsMin"]=str(params["profitsMin"])+'$'
+    if params.has_key("profitsMin"):
+        params["profitsMin"]=str(params["profitsMin"])+'$'
+    else:
+        params["profitsMin"]="0"
     params["howManyPixiu"]=str(params["howManyPixiu"])
     params["piXiuName"]=str(params["piXiuName"])
     params["piXiuPrice"]=str(params["piXiuPrice"])+'$'
