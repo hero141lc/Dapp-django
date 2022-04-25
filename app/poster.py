@@ -15,7 +15,7 @@ class posterapi():
         params = dict(params)
         params['id'] = posterId
         url = f"{self.endpoint}/api/link"
-        #print("getUrl:",url)
+        print("getUrl:",url)
         headers = {
             'Content-Type': 'application/json',
             'token': self.token
