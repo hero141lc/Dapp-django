@@ -32,7 +32,7 @@ def Kline(contenst):
     print(contenst)
     #print(json.loads(res)['data']['items'])
     try:
-        data=json.loads(res)['data']['items']
+        data=eval(res)['data']['items']
         for item in data:
             
             if item['contract_address'] == contenst:
@@ -56,7 +56,9 @@ def result(request):
     response =render(request, 'app/result.html',context)
    
     response.set_cookie('context', str(context), max_age=None, expires=None,domain=None, secure=False, httponly=False, samesite=None)
-
+    print()
+    context['firstTime'] = str(context['firstTime']).replace('-', '年', 1)
+    context['firstTime'] = context['firstTime'].replace('-', '月', 1)+'日'
     return response
 
 def create(request):

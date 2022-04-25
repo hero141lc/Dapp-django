@@ -238,7 +238,7 @@ def getOrder(address):
     maifeiPeak=0
     maifeiMax=0
     pixiuKing=[0,0,'']
-
+    latestItem={}
     for item in data:
        
         if  type(item) is not dict:
@@ -328,12 +328,16 @@ def getOrder(address):
                             }
                         else:
                             a['price']+=item2['price']
-            
+    #First buying Coin 
+    for item2 in reversed(toList):
+        if 'price' in item2.keys():
+            latestItem=item2
+            latestItem['firstTime']=str(latestItem['time'].date().isoformat())
+            break
+    print("toList",toList)
     end_time = time.time()
     print("Important:Foreach BOsslist: {:.2f}S".format(end_time - start_time))
     profits=toMoney-fromMoney
-    print(newFromDict)
-    print(newToDict)
     for j,k in newToDict.items():
         print("k")
         try:
@@ -361,6 +365,7 @@ def getOrder(address):
                     profitsMin=coninProfits
                     minName=newFromDict[j]['name']
     end_time = time.time()
+    print("newToDict",newToDict)
     print("Important:Foreach NewTolist: {:.2f}S".format(end_time - start_time))
     months=12
     brickDays=int(profits/1e19/32)
@@ -385,6 +390,9 @@ def getOrder(address):
         'piXiuName':pixiuKing[2],
         'piXiuPrice':abs(int(pixiuKing[1]/1e19)),
         'maifeiMax':abs(int(maifeiMax/1e19)),
+        'firstCoin':latestItem['tokenSymbol'],
+        'firstTime':latestItem['time'],
+        'firstPrice':latestItem['price']/1e19,
     }
     end_time = time.time()
     print("Important:Result: {:.2f}S".format(end_time - start_time))
