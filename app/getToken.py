@@ -332,8 +332,8 @@ def getOrder(address):
     end_time = time.time()
     print("Important:Foreach BOsslist: {:.2f}S".format(end_time - start_time))
     profits=toMoney-fromMoney
-    print(newFromDict)
-    print(newToDict)
+    #print(newFromDict)
+    #print(newToDict)
     for j,k in newToDict.items():
         print("k")
         try:
