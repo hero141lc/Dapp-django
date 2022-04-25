@@ -191,15 +191,8 @@ def newData(contenst,yearsAgo,toDate):
     print("npixiu",npixiu)
     tokenOb= Token.objects.create(decimals=int(data['contract_decimals']),name=data['contract_name'],symbol=data['contract_ticker_symbol'],logo_url=data['logo_url'],address=data['contract_address'],update_at=datetime.datetime.strptime(data['update_at'][0:11], "%Y-%m-%dT"),quote_currency=data['quote_currency'],pixiu=npixiu)
     
-    defaultPirce=-1
-    if data['contract_name'] == None:
-        defaultPirce = getPriceFromPancake(contenst)
-
     for item in priceList:
-        usedPrice = price=item['price']
-        if defaultPirce > 0:
-            usedPrice = defaultPirce
-        
+        usedPrice = price=item['price']        
         Prices.objects.create(date=datetime.datetime.strptime(item['date'][0:10], "%Y-%m-%d"),price=usedPrice, Token=tokenOb)
     print('New Coin Added Successed:',data['contract_ticker_symbol'],data['update_at'])
     end_time = time.time()
@@ -417,6 +410,10 @@ def getOrder(address):
                             simpleSell['amount']+=sellTrx['amount']
     #First buying Coin 
     buyTrxList.sort(key=lambda x:x['time'])
+
+    latestItem['firstTime'] = ''
+    latestItem['amount'] = 0
+    
     for buyTrx in buyTrxList:
         if 'amount' in buyTrx.keys():
             latestItem=buyTrx
