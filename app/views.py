@@ -73,12 +73,16 @@ def create(request):
     for cookie_key,cookie_value in cookies.items():
         print(cookie_key,cookie_value)
     cookie_value=eval(cookie_value)
+    cookie_value['firstTime'] = str(cookie_value['firstTime']).replace('-', '年', 1)
+    cookie_value['firstTime'] = cookie_value['firstTime'].replace('-', '月', 1)+'日'
+    print("cookie_value['firstTime']",cookie_value['firstTime'])
     if ('profits' in cookie_value) and int(cookie_value['profits'])>0:
         posterUrl=win(cookies)
     else:
         posterUrl=lose(cookies)
     cookie_value['posterUrl']=posterUrl
     cookie_value['houlders']=howManyHoulder()
+
     # K line
     brickOb=exSql('0xc4893fea8547fb1a4d860518285af6655424645f')
     cookie_value['priceNow']=Prices.objects.filter(Token=brickOb).last().price
