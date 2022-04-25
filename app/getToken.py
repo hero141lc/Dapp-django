@@ -243,7 +243,6 @@ def filterToFrom(item):
         item['value']=int(item['value'])            
         item['time']=datetime.datetime.fromtimestamp(int(item['timeStamp']))
         toList.append(item)
-    print('Address',getAddres)
     return 0
 def getOrder(address):
     # GLobal key
