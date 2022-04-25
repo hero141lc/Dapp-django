@@ -273,6 +273,7 @@ def getOrder(address):
     maifeiMax=0
     pixiuKing=[0,0,'']
     latestItem={}
+    latestItem['tokenSymbol']=''
     pool = ThreadPool(multiprocessing.cpu_count())
     data=filter(lambda x : x != 1,pool.map(filterToFrom, data))
     for item in data:
@@ -306,7 +307,8 @@ def getOrder(address):
         priceOb=Prices.objects.filter(Token=toeknOb).values()
         for item  in priceOb:
             for item2 in fromList:
-                if item2['contractAddress'] == toeknOb.address and 'LP' not in item2['tokenSymbol']:
+                if item2['contractAddress'] == toeknOb.address:
+                #and 'LP' not in item2['tokenSymbol']:
                     if item2['time'].date()==item['date'].date():
                         try:
                             item2['price']=int(item2['value']*item['price'])
