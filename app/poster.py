@@ -61,9 +61,9 @@ def lose(paramsa):
         params["profitsMin"]=str(params["profitsMin"])+'$'
     else:
         params["profitsMin"]="0$"
-    params["howManyPixiu"]=str(params["howManyPixiu"])
-    params["piXiuName"]=str(params["piXiuName"])
-    params["piXiuPrice"]=str(params["piXiuPrice"])+'$'
+    params["howManyPixiu"]="0$"
+    params["piXiuName"]="0$"
+    params["piXiuPrice"]="0$"
     params["maifeiWho"]=str(params["maifeiWho"])
     params["maifeiPeak"]=str(params["maifeiPeak"])+'$'
     '''
