@@ -472,7 +472,7 @@ def getOrder(address):
         'buyAmountOfMax_Maifei':abs(int(buyAmountOfMax_Maifei/1e18)),
         'firstCoin':latestItem['tokenSymbol'],
         'firstTime':latestItem['firstTime'],
-        'firstPrice':round(latestItem['amount'],2),
+        'firstPrice':round(latestItem['amount']/1e18,2),
     }
     end_time = time.time()
     print("Important:Result: {:.2f}S".format(end_time - start_time))
