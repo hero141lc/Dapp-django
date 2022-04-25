@@ -20,13 +20,7 @@ from multiprocessing.pool import ThreadPool
 import multiprocessing
 pancakeAddr='0x10ed43c718714eb63d5aa57b78b54704e256024e'
 
-# Global
-toList=[]
-fromList=[]
-toNameList=set()
-fromNameList=set()
-getAddress=''
-i=0
+
 #returns a address the trading pairs on pancake
 #基础币 如:wbnb，usdt,busd
 WETH = '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c'
@@ -229,30 +223,19 @@ def exSql(contenst):
     return data
 # spirit data to toList or FromList
 def filterToFrom(item):
-    global toList,fromList,toNameList,fromNameList,getAddres
-    if  type(item) is not dict:
-        print("item-data:",type(item),item)
-        time.sleep(200)
+ 
+    if item['contractAddress']!=None and item['contractAddress'] in ban_token:
+        print("Is LP or None")
         return 1
-
-    if item['contractAddress']!=None and item['contractAddress'] in ban_token and isLP( Web3.toChecksumAddress(item['contractAddress'])):
-        
-        return 1
-    if item['from'] == getAddres:
-        fromNameList.add(item['contractAddress'])
-        item['value']=int(item['value'])
-        item['time']=datetime.datetime.fromtimestamp(int(item['timeStamp']))
-        fromList.append(item)
-
-    elif item['to'] == getAddres:
-        toNameList.add(item['contractAddress'])
-        item['value']=int(item['value'])            
-        item['time']=datetime.datetime.fromtimestamp(int(item['timeStamp']))
-        toList.append(item)
-    return 0
+    if isLP( Web3.toChecksumAddress(item['contractAddress'])):
+        return item
+    return 1
 def getOrder(address):
-    # GLobal key
-    global toList,fromList,toNameList,fromNameList,getAddres
+    # Global
+    toList=[]
+    fromList=[]
+    toNameList=set()
+    fromNameList=set()
     start_time = time.time()
     address=address.strip().replace('\n', '').replace('\r', '').lower()
     addressRes='address='+address
@@ -261,13 +244,10 @@ def getOrder(address):
     URL='https://api.bscscan.com/api?module=account&action=tokentx&&'+addressRes+'&page=1&offset=10000&startblock=0&endblock=99999999999&sort=asc&apikey=TFD2ZDC1W77QAXP38SF9I1Z6T34GBGIGUJ'
     res = requests.get(URL).text
     data=json.loads(res)['result']
-
     newToDict={}
     newFromDict={}
     newDict={}
-
     bossList=set()
-
     toPriceList=[]
     fromPriceList=[]
     pricesList=[]
@@ -292,12 +272,26 @@ def getOrder(address):
     maifeiMax=0
     pixiuKing=[0,0,'']
     latestItem={}
-
     pool = ThreadPool(multiprocessing.cpu_count())
-    pool.map(filterToFrom, data)
-    
-    
+    data=pool.map(filterToFrom, data)
+    for item in data:
+        if  type(item) is not dict:
+            print("item-data:",type(item),item)
+            time.sleep(200)
+            continue
+        if item['from'] == getAddres:
+            fromNameList.add(item['contractAddress'])
+            item['value']=int(item['value'])
+            item['time']=datetime.datetime.fromtimestamp(int(item['timeStamp']))
+            fromList.append(item)
+
+        elif item['to'] == getAddres:
+            toNameList.add(item['contractAddress'])
+            item['value']=int(item['value'])            
+            item['time']=datetime.datetime.fromtimestamp(int(item['timeStamp']))
+            toList.append(item)
     end_time = time.time()
+
     print("Important:Foreach Item: {:.2f}S".format(end_time - start_time))
     bossList=fromNameList&toNameList
     #print(bossList,fromNameList,toNameList)
