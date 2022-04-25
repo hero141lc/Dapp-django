@@ -223,11 +223,10 @@ def exSql(contenst):
     return data
 # spirit data to sellTrxList or buyTrxList
 def filterToFrom(item):
-    #todo: need fix acquire user address.
-    userWalletAddress = "0xfdfs11"
-
     if "to" not in item or "from" not in item:
         return 1
+
+    userWalletAddress = item["userAddress"]
 
     if userWalletAddress == item['to'] and isLP(Web3.toChecksumAddress(item['from'])):
         return item
@@ -280,6 +279,9 @@ def getOrder(address):
     pixiuKing=[0,0,'']
     latestItem={}
     latestItem['tokenSymbol']=''
+
+    for item in data:
+        item["userAddress"] = address
 
     pool = ThreadPool(multiprocessing.cpu_count())
     data=filter(lambda x : x != 1,pool.map(filterToFrom, data))
