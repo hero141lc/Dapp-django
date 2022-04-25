@@ -159,6 +159,16 @@ bnx0x8c851d1a123ff703bd1f9dabe631b69902df5f97
 bit0xc864019047b864b6ab609a968ae2725dfaee808a
 '''
 
+def getPriceFromPancake(tokenAddr):
+    try:
+        URL = 'https://api.pancakeswap.info/api/v2/tokens/'+tokenAddr
+        res = requests.get(URL).text
+        data=json.loads(res)['data']
+        return data['price']
+    except:
+        return -1
+
+
 def newData(contenst,yearsAgo,toDate):
     start_time = time.time()
     #fromDate = '2022-03-14'
@@ -173,8 +183,17 @@ def newData(contenst,yearsAgo,toDate):
         npixiu = True
     print("npixiu",npixiu)
     tokenOb= Token.objects.create(decimals=int(data['contract_decimals']),name=data['contract_name'],symbol=data['contract_ticker_symbol'],logo_url=data['logo_url'],address=data['contract_address'],update_at=datetime.datetime.strptime(data['update_at'][0:11], "%Y-%m-%dT"),quote_currency=data['quote_currency'],pixiu=npixiu)
+    
+    defaultPirce=-1
+    if data['contract_name'] == None:
+        defaultPirce = getPriceFromPancake(contenst)
+
     for item in priceList:
-        Prices.objects.create(date=datetime.datetime.strptime(item['date'][0:10], "%Y-%m-%d"),price=item['price'], Token=tokenOb)
+        usedPrice = price=item['price']
+        if defaultPirce > 0:
+            usedPrice = defaultPirce
+        
+        Prices.objects.create(date=datetime.datetime.strptime(item['date'][0:10], "%Y-%m-%d"),price=usedPrice, Token=tokenOb)
     print('New Coin Added Successed:',data['contract_ticker_symbol'],data['update_at'])
     end_time = time.time()
     print("Important:newData: {:.2f}S".format(end_time - start_time))
