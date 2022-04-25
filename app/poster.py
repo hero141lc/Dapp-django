@@ -28,7 +28,6 @@ class posterapi():
         self.link = link
         end_time = time.time()
         print("geturl const: {:.2f}s".format(end_time - start_time))
-s
         return link
 
     def save(self, filename='tmp.jpg'):
