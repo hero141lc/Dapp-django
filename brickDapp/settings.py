@@ -95,7 +95,7 @@ DATABASES = {
         # HOST
         'POST': 3306, 
         # 端口
-        'OPTIONS': {'charset':'utf8mb4'}, #charset
+        'OPTIONS': {'charset':'utf8mb4'},
 
     }
 }
