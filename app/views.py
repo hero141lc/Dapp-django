@@ -73,7 +73,7 @@ def create(request):
     for cookie_key,cookie_value in cookies.items():
         print(cookie_key,cookie_value)
     cookie_value=eval(cookie_value)
-    if int(cookie_value['profits'])>0:
+    if ('profits' in cookie_value) and int(cookie_value['profits'])>0:
         posterUrl=win(cookies)
     else:
         posterUrl=lose(cookies)

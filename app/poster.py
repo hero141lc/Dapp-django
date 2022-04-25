@@ -1,6 +1,8 @@
 import requests
 import json
 import datetime
+import time
+
 class posterapi():
 
     def __init__(self, endpoint: str, token: str):
@@ -10,9 +12,11 @@ class posterapi():
         self.token = token
 
     def getUrl(self, posterId: str, params: dict = {}):
+        start_time = time.time()
         params = dict(params)
         params['id'] = posterId
         url = f"{self.endpoint}/api/link"
+        print("getUrl:",url)
         headers = {
             'Content-Type': 'application/json',
             'token': self.token
@@ -23,6 +27,8 @@ class posterapi():
         if not link.startswith('http'):
             link = self.endpoint + link
         self.link = link
+        end_time = time.time()
+        print("geturl const: {:.2f}s".format(end_time - start_time))
         return link
 
     def save(self, filename='tmp.jpg'):
@@ -51,18 +57,30 @@ def win(paramsa):
     return url+'.jpg'
     #api.save()
 def lose(paramsa):
-    api = posterapi('http://brickcn.xyz:5000/', 'ApfrIzxCoK1DwNZOEJCwlrnv6QZ0PCdv')
+    api = posterapi('http://poster.brickcn.xyz:5000/', 'ApfrIzxCoK1DwNZOEJCwlrnv6QZ0PCdv')
     paramsa = eval(paramsa['context'])
     params = {}
     params["times"]=str(paramsa["times"])
     params["profits"]=str(paramsa["profits"])+'$'
     params["brickDays"]=str(paramsa["brickDays"])
-    params["profitsMin"]=str(params["profitsMin"])+'$'
-    params["howManyPixiu"]=str(params["howManyPixiu"])
-    params["piXiuName"]=str(params["piXiuName"])
-    params["piXiuPrice"]=str(params["piXiuPrice"])+'$'
-    params["maifeiWho"]=str(params["maifeiWho"])
-    params["maifeiPeak"]=str(params["maifeiPeak"])+'$'
+    if "profitsMin" in params:
+        params["profitsMin"]=str(params["profitsMin"])+'$'
+    else:
+        params["profitsMin"]="0$"
+    params["howManyPixiu"]="0$"
+    params["piXiuName"]="0$"
+    params["piXiuPrice"]="0$"
+
+    if "maifeiWho" in params:
+        params["maifeiWho"]=str(params["maifeiWho"])
+    else:
+        params["maifeiWho"]=""
+
+    if "maifeiPeak" in params:
+        params["maifeiPeak"]=str(params["maifeiPeak"])+'$'
+    else:
+        params["maifeiPeak"]="0$"    
+    
     '''
     params = {}
     params["times"]="0"
