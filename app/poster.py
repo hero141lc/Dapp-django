@@ -60,7 +60,7 @@ def lose(paramsa):
     if params.has_key("profitsMin"):
         params["profitsMin"]=str(params["profitsMin"])+'$'
     else:
-        params["profitsMin"]="0"
+        params["profitsMin"]="$"
     params["howManyPixiu"]=str(params["howManyPixiu"])
     params["piXiuName"]=str(params["piXiuName"])
     params["piXiuPrice"]=str(params["piXiuPrice"])+'$'
