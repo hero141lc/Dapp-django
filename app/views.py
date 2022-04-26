@@ -57,8 +57,11 @@ def result(request):
    
     response.set_cookie('context', str(context), max_age=None, expires=None,domain=None, secure=False, httponly=False, samesite=None)
     print()
+    if context['firstTime']=='':
+        return response
     context['firstTime'] = str(context['firstTime']).replace('-', '年', 1)
     context['firstTime'] = context['firstTime'].replace('-', '月', 1)+'日'
+    response =render(request, 'app/result.html',context)
     return response
 
 def create(request):

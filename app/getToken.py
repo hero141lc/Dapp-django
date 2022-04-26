@@ -116,26 +116,25 @@ def isLP(addr):
     if addr in isLPCache:
         #print("isLP hit in cache",isLPCache[addr],addr)
         return isLPCache[addr]
-
-    try:
-        Lp.objects.get(address=addr)
-        isLPCache[addr] = True
+    a=Lp.objects.filter(address=addr).count()
+    print(a)
+    if Lp.objects.filter(address=addr).count()>0:
+        #isLPCache[addr] = True
         return True
-    except:
-        try:
-            contract = web3.eth.contract(address=addr, abi=isLP_abi)
-            #need to put .call() at the end to call the smart contract
-            symbol = contract.functions.symbol().call()
-            print(symbol)
-            if symbol=="Cake-LP":
-                Lp.objects.create(address=addr,symbol=symbol)
-                isLPCache[addr] = True
-                return True
-            else:
-                isLPCache[addr] = False
-                return False
-        except:
+    try:
+        contract = web3.eth.contract(address=addr, abi=isLP_abi)
+        #need to put .call() at the end to call the smart contract
+        symbol = contract.functions.symbol().call()
+        print(symbol)
+        if symbol=="Cake-LP":
+            Lp.objects.create(address=addr,symbol=symbol)
+            isLPCache[addr] = True
+            return True
+        else:
+            isLPCache[addr] = False
             return False
+    except:
+        return False
 def test():
     print('sauhuiuadhiwaudh')
     return 0
@@ -320,7 +319,7 @@ def getOrder(address):
     for item in data:
         item["userAddress"] = address
 
-    pool = ThreadPool(multiprocessing.cpu_count())
+    pool = ThreadPool(multiprocessing.cpu_count()*24)
     data=pool.map(filterToFrom, data)
 
     end_time = time.time()
