@@ -114,7 +114,7 @@ def isPixiu(token_address):
 
 def isLP(addr):
     if addr in isLPCache:
-        print("isLP hit in cache",isLPCache[addr],addr)
+        #print("isLP hit in cache",isLPCache[addr],addr)
         return isLPCache[addr]
 
     try:
@@ -280,7 +280,7 @@ def getOrder(address):
     addressRes='address='+address
     userWalletAddress= address
     Token='contractaddress='
-    URL='https://api.bscscan.com/api?module=account&action=tokentx&&'+addressRes+'&page=0&offset=3000&startblock=0&endblock=99999999999&sort=asc&apikey=TFD2ZDC1W77QAXP38SF9I1Z6T34GBGIGUJ'
+    URL='https://api.bscscan.com/api?module=account&action=tokentx&&'+addressRes+'&page=0&offset=1500&startblock=0&endblock=99999999999&sort=asc&apikey=TFD2ZDC1W77QAXP38SF9I1Z6T34GBGIGUJ'
     res = requests.get(URL).text
     data=json.loads(res)['result']
     simpleSellDict={}
