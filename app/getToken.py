@@ -12,6 +12,7 @@ import json
 from unittest import result
 import requests
 import datetime
+import asyncio
 
 from sqlalchemy import false
 from .models import Token,Prices,Trans,Wallet,Lp
@@ -220,7 +221,7 @@ def getData(tokenOb,fromDate,toDate):
     print("Important:getData: {:.2f}S".format(end_time - start_time))
     return tokenOb
 
-def exSql(contenst):
+async def exSql(contenst):
     start_time = time.time()
     timeNow=datetime.datetime.now()
     toDate=timeNow.date().isoformat()
