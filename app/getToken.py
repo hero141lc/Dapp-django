@@ -221,7 +221,10 @@ def getData(tokenOb,fromDate,toDate):
     print("Important:getData: {:.2f}S".format(end_time - start_time))
     return tokenOb
 
-async def exSql(contenst):
+async def asyncExSql(addr):
+    return exSql(addr)
+
+def exSql(contenst):
     start_time = time.time()
     timeNow=datetime.datetime.now()
     toDate=timeNow.date().isoformat()
@@ -345,7 +348,7 @@ def getOrder(address):
     allTokens = buyTokenList & sellTokenList
 
     #save or update token info to db.
-    pool.map(exSql, allTokens)
+    pool.map(asyncExSql, allTokens)
 
     end_time = time.time()
     print("Important:saveOrupdate token: {:.2f}S".format(end_time - start_time))
@@ -354,7 +357,7 @@ def getOrder(address):
     for _token in allTokens:
 
         #query token info from mysql.
-        toeknObject=exSql(_token)
+        toeknObject= exSql(_token)
         if toeknObject==1:
             print("ERROR",toeknObject)
             break
