@@ -258,6 +258,9 @@ def filterToFrom(item):
     if "to" not in item or "from" not in item:
         return 1
 
+    if "contractAddress" not in item ||   item["contractAddress"] in ban_token:
+        return 1
+
     userWalletAddress = item["userAddress"]
     userWalletAddress = userWalletAddress.lower()
 
