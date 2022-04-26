@@ -184,7 +184,7 @@ def getPriceFromPancake(tokenAddr):
         return -1
 
 
-def newData(contenst,yearsAgo,toDate):
+async def newData(contenst,yearsAgo,toDate):
     start_time = time.time()
     #fromDate = '2022-03-14'
     #toDate = '2022-04-15'
