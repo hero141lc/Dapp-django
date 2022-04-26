@@ -111,26 +111,26 @@ def isPixiu(token_address):
         print("no")
 # Is_LP
 
-def isLP(address):
-    if address in isLPCache:
-        return isLPCache[address]
+def isLP(addr):
+    if addr in isLPCache:
+        return isLPCache[addr]
 
     try:
-        Lp.objects.get(address=address)
-        isLPCache[address] = True
+        Lp.objects.get(address=addr)
+        isLPCache[addr] = True
         return True
     except:
         try:
-            contract = web3.eth.contract(address=address, abi=isLP_abi)
+            contract = web3.eth.contract(address=addr, abi=isLP_abi)
             #need to put .call() at the end to call the smart contract
             symbol = contract.functions.symbol().call()
             print(symbol)
             if symbol=="Cake-LP":
-                Lp.objects.create(address=address,symbol=symbol)
-                isLPCache[address] = True
+                Lp.objects.create(address=addr,symbol=symbol)
+                isLPCache[addr] = True
                 return True
             else:
-                isLPCache[address] = False
+                isLPCache[addr] = False
                 return False
         except:
             return False
@@ -313,11 +313,15 @@ def getOrder(address):
 
     pool = ThreadPool(multiprocessing.cpu_count())
     data=pool.map(filterToFrom, data)
-    
+
+    end_time = time.time()
+    print("Important:filterToFrom: {:.2f}S".format(end_time - start_time))
+
+
     #parse all transactions && dispatch trx to right category.
     for item in data:
         if  type(item) is not dict:
-            print("item-data:",type(item),item)
+            #print("item-data:",type(item),item)
             continue
         times+=1
         #sell token to pancake(pair)
@@ -341,6 +345,10 @@ def getOrder(address):
 
     #save or update token info to db.
     pool.map(exSql, allTokens)
+
+    end_time = time.time()
+    print("Important:saveOrupdate token: {:.2f}S".format(end_time - start_time))
+
 
     for _token in allTokens:
 
