@@ -44,6 +44,9 @@ bot_address = '0x4780B172B24cE1fC9e63A4A61378080de4B029B5'
 bot_contract = web3.eth.contract(address=bot_address, abi=bot_abi)
 ban_token = ['0xe9e7cea3dedca5984780bafc599bd69add087d56','0x55d398326f99059ff775485246999027b3197955','0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c','0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d','0x1af3f329e8be154074d8769d1ffa4ee058b1dbc3','0x2170ed0880ac9a755fd29b2688956bd959f933f8'
 ]
+
+isLPCache = {}
+
 def detectFee(pair_addr,token_addr,base_token_addr):
     return bot_contract.functions.detectFee(pair_addr,token_addr,base_token_addr,10000000000000000).call()
 
@@ -109,9 +112,12 @@ def isPixiu(token_address):
 # Is_LP
 
 def isLP(adderss):
+    if address in isLPCache:
+        return isLPCache[adderss]
 
     try:
         Lp.objects.get(address=adderss)
+        isLPCache[adderss] = True
         return True
     except:
         try:
@@ -121,8 +127,10 @@ def isLP(adderss):
             print(symbol)
             if symbol=="Cake-LP":
                 Lp.objects.create(address=adderss,symbol=symbol)
+                isLPCache[adderss] = True
                 return True
             else:
+                isLPCache[adderss] = False
                 return False
         except:
             return False
