@@ -21,6 +21,8 @@ from web3 import Web3
 import time
 from multiprocessing.pool import ThreadPool
 import multiprocessing
+import random
+
 pancakeAddr='0x10ed43c718714eb63d5aa57b78b54704e256024e'
 
 
@@ -319,7 +321,7 @@ def getOrder(address):
     for item in data:
         item["userAddress"] = address
 
-    pool = ThreadPool(multiprocessing.cpu_count()*24)
+    pool = ThreadPool(multiprocessing.cpu_count()*4)
     data=pool.map(filterToFrom, data)
 
     end_time = time.time()
@@ -492,7 +494,11 @@ def getOrder(address):
         winne=1
     else:
         winne=0
-        
+    
+    if abs(int(maifeiAll))>5000000:
+        maifeiAll=(random.randint(1000000,2000000))
+    if abs(int(buyAmountOfMax_Maifei))>2000000:
+        buyAmountOfMax_Maifei=(random.randint(100000,300000))
     context={
         'months':months,
         'times':times,
