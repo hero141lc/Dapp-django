@@ -114,6 +114,7 @@ def isPixiu(token_address):
 
 def isLP(addr):
     if addr in isLPCache:
+        print("isLP hit in cache",addr)
         return isLPCache[addr]
 
     try:
