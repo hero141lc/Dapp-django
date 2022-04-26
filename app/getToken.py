@@ -319,7 +319,7 @@ def getOrder(address):
     for item in data:
         item["userAddress"] = address
 
-    pool = ThreadPool(multiprocessing.cpu_count()*24)
+    pool = ThreadPool(multiprocessing.cpu_count())
     data=pool.map(filterToFrom, data)
 
     end_time = time.time()
