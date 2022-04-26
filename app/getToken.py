@@ -196,11 +196,11 @@ def newData(contenst,yearsAgo,toDate):
     res = requests.get(URL).text
     data=json.loads(res)['data'][0]
     priceList = data['prices']
-    # npixiu = False
-    # if piXiu(contenst) != 0:
-    #     npixiu = True
-    # print("npixiu",npixiu)
-    tokenOb= Token.objects.create(decimals=int(data['contract_decimals']),name=data['contract_name'],symbol=data['contract_ticker_symbol'],logo_url=data['logo_url'],address=data['contract_address'],update_at=datetime.datetime.strptime(data['update_at'][0:11], "%Y-%m-%dT"),quote_currency=data['quote_currency'])
+    npixiu = False
+    if piXiu(contenst) != 0:
+        npixiu = True
+    print("npixiu",npixiu)
+    tokenOb= Token.objects.create(decimals=int(data['contract_decimals']),name=data['contract_name'],symbol=data['contract_ticker_symbol'],logo_url=data['logo_url'],address=data['contract_address'],pixiu=npixiu,update_at=datetime.datetime.strptime(data['update_at'][0:11], "%Y-%m-%dT"),quote_currency=data['quote_currency'])
     
     for item in priceList:
         usedPrice=item['price']        
@@ -266,10 +266,10 @@ def filterToFrom(item):
     userWalletAddress = item["userAddress"]
     userWalletAddress = userWalletAddress.lower()
 
-    if userWalletAddress == item['to'].lower() and isLP(web3.toChecksumAddress(item['from'])):
+    if userWalletAddress == item['to'].lower():
         return item
 
-    if userWalletAddress == item['from'].lower() and isLP(web3.toChecksumAddress(item['to'])):
+    if userWalletAddress == item['from'].lower():
         return item
 
     return 1
@@ -363,6 +363,9 @@ def getOrder(address):
     for _token in allTokens:
         #query token info from mysql.
         toeknObject= exSql(_token)
+        if toeknObject.pixiu:
+            print("Pixiu",toeknObject)
+            continue
         if toeknObject==1:
             print("ERROR",toeknObject)
             continue
