@@ -101,8 +101,8 @@ def isPixiu(token_address):
         print("Important:isPixiu: {:.2f}S".format(end_time - start_time))
         if tokenOb.pixiu == True:
             return 1
-        else:
-            return 0
+# temp Pi xiu save
+
     except:
         tokenOb=exSql(token_address)
         end_time = time.time()
@@ -266,10 +266,10 @@ def filterToFrom(item):
     userWalletAddress = item["userAddress"]
     userWalletAddress = userWalletAddress.lower()
 
-    if userWalletAddress == item['to'].lower():
+    if userWalletAddress == item['to'].lower() and isLP(web3.toChecksumAddress(item['from'])):
         return item
 
-    if userWalletAddress == item['from'].lower():
+    if userWalletAddress == item['from'].lower() and isLP(web3.toChecksumAddress(item['to'])):
         return item
 
     return 1
