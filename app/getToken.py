@@ -497,11 +497,11 @@ def getOrder(address):
         winne=1
     else:
         winne=0
-    
+  
     if abs(int(maifeiAll))>5000000:
         maifeiAll=(random.randint(1000000,2000000))
-    if abs(int(buyAmountOfMax_Maifei))>2000000:
-        buyAmountOfMax_Maifei=(random.randint(100000,300000))
+    if abs(int(maifeiPeak))>2000000:
+        maifeiPeak=(random.randint(100000,300000))
     context={
         'months':months,
         'times':times,
