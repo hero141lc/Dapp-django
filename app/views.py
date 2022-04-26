@@ -55,7 +55,7 @@ def result(request):
     print(context)
     response =render(request, 'app/result.html',context)
    
-    response.set_cookie('context', str(context), max_age=None, expires=None,domain=None, secure=False, httponly=False, samesite=None)
+    response.set_cookie('context', str(context), max_age= 60*5, expires=None,domain=None, secure=False, httponly=False, samesite=None)
     print()
     if context['firstTime']=='':
         return response
