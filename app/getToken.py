@@ -12,6 +12,7 @@ import json
 from unittest import result
 import requests
 import datetime
+import asyncio
 
 from sqlalchemy import false
 from .models import Token,Prices,Trans,Wallet,Lp
@@ -44,6 +45,9 @@ bot_address = '0x4780B172B24cE1fC9e63A4A61378080de4B029B5'
 bot_contract = web3.eth.contract(address=bot_address, abi=bot_abi)
 ban_token = ['0xe9e7cea3dedca5984780bafc599bd69add087d56','0x55d398326f99059ff775485246999027b3197955','0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c','0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d','0x1af3f329e8be154074d8769d1ffa4ee058b1dbc3','0x2170ed0880ac9a755fd29b2688956bd959f933f8'
 ]
+
+isLPCache = {}
+
 def detectFee(pair_addr,token_addr,base_token_addr):
     return bot_contract.functions.detectFee(pair_addr,token_addr,base_token_addr,10000000000000000).call()
 
@@ -108,21 +112,27 @@ def isPixiu(token_address):
         print("no")
 # Is_LP
 
-def isLP(adderss):
+def isLP(addr):
+    if addr in isLPCache:
+        print("isLP hit in cache",isLPCache[addr],addr)
+        return isLPCache[addr]
 
     try:
-        Lp.objects.get(address=adderss)
+        Lp.objects.get(address=addr)
+        isLPCache[addr] = True
         return True
     except:
         try:
-            contract = web3.eth.contract(address=adderss, abi=isLP_abi)
+            contract = web3.eth.contract(address=addr, abi=isLP_abi)
             #need to put .call() at the end to call the smart contract
             symbol = contract.functions.symbol().call()
             print(symbol)
             if symbol=="Cake-LP":
-                Lp.objects.create(address=adderss,symbol=symbol)
+                Lp.objects.create(address=addr,symbol=symbol)
+                isLPCache[addr] = True
                 return True
             else:
+                isLPCache[addr] = False
                 return False
         except:
             return False
@@ -174,7 +184,7 @@ def getPriceFromPancake(tokenAddr):
         return -1
 
 
-def newData(contenst,yearsAgo,toDate):
+async def newData(contenst,yearsAgo,toDate):
     start_time = time.time()
     #fromDate = '2022-03-14'
     #toDate = '2022-04-15'
@@ -211,6 +221,9 @@ def getData(tokenOb,fromDate,toDate):
     end_time = time.time()
     print("Important:getData: {:.2f}S".format(end_time - start_time))
     return tokenOb
+
+async def asyncExSql(addr):
+    return exSql(addr)
 
 def exSql(contenst):
     start_time = time.time()
@@ -267,7 +280,7 @@ def getOrder(address):
     addressRes='address='+address
     userWalletAddress= address
     Token='contractaddress='
-    URL='https://api.bscscan.com/api?module=account&action=tokentx&&'+addressRes+'&page=1&offset=3000&startblock=0&endblock=99999999999&sort=asc&apikey=TFD2ZDC1W77QAXP38SF9I1Z6T34GBGIGUJ'
+    URL='https://api.bscscan.com/api?module=account&action=tokentx&&'+addressRes+'&page=0&offset=3000&startblock=0&endblock=99999999999&sort=asc&apikey=TFD2ZDC1W77QAXP38SF9I1Z6T34GBGIGUJ'
     res = requests.get(URL).text
     data=json.loads(res)['result']
     simpleSellDict={}
@@ -303,13 +316,17 @@ def getOrder(address):
     for item in data:
         item["userAddress"] = address
 
-    pool = ThreadPool(multiprocessing.cpu_count()*4)
+    pool = ThreadPool(multiprocessing.cpu_count())
     data=pool.map(filterToFrom, data)
-    
+
+    end_time = time.time()
+    print("Important:filterToFrom: {:.2f}S".format(end_time - start_time))
+
+
     #parse all transactions && dispatch trx to right category.
     for item in data:
         if  type(item) is not dict:
-            print("item-data:",type(item),item)
+            #print("item-data:",type(item),item)
             continue
         times+=1
         #sell token to pancake(pair)
@@ -332,12 +349,16 @@ def getOrder(address):
     allTokens = buyTokenList & sellTokenList
 
     #save or update token info to db.
-    pool.map(exSql, allTokens)
+    pool.map(asyncExSql, allTokens)
+
+    end_time = time.time()
+    print("Important:saveOrupdate token: {:.2f}S".format(end_time - start_time))
+
 
     for _token in allTokens:
 
         #query token info from mysql.
-        toeknObject=exSql(_token)
+        toeknObject= exSql(_token)
         if toeknObject==1:
             print("ERROR",toeknObject)
             break
@@ -351,6 +372,8 @@ def getOrder(address):
                 #and 'LP' not in buyTrx['tokenSymbol']:
                     if buyTrx['time'].date()==dailyPrice['date'].date():
                         try:
+
+                            buyTrx['amount']=int(buyTrx['value']*dailyPrice['price'])
                             peakPrice=Prices.objects.filter(Q(Token=toeknObject)&Q(date__gt=dailyPrice['date'])).aggregate(Max('price'))['price__max']
                             
                             #Maifei
