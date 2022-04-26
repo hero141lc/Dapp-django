@@ -232,7 +232,7 @@ def exSql(contenst):
     try:
         tokenOb=Token.objects.get(address=contenst)
         tokenObTime=tokenOb.update_at.date()
-        print("how long update:",(timeNow.date()-tokenObTime).days)
+        #print("how long update:",(timeNow.date()-tokenObTime).days)
         if (timeNow.date()-tokenObTime).days>1:
             tokenOb.update_at=timeNow
             tokenOb.save()
