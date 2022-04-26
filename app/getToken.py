@@ -303,7 +303,7 @@ def getOrder(address):
     for item in data:
         item["userAddress"] = address
 
-    pool = ThreadPool(multiprocessing.cpu_count()*4)
+    pool = ThreadPool(multiprocessing.cpu_count())
     data=pool.map(filterToFrom, data)
     
     #parse all transactions && dispatch trx to right category.
@@ -351,7 +351,7 @@ def getOrder(address):
                 #and 'LP' not in buyTrx['tokenSymbol']:
                     if buyTrx['time'].date()==dailyPrice['date'].date():
                         try:
-                            
+
                             buyTrx['amount']=int(buyTrx['value']*dailyPrice['price'])
                             peakPrice=Prices.objects.filter(Q(Token=toeknObject)&Q(date__gt=dailyPrice['date'])).aggregate(Max('price'))['price__max']
                             
