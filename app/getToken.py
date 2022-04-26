@@ -111,26 +111,26 @@ def isPixiu(token_address):
         print("no")
 # Is_LP
 
-def isLP(adderss):
+def isLP(address):
     if address in isLPCache:
-        return isLPCache[adderss]
+        return isLPCache[address]
 
     try:
-        Lp.objects.get(address=adderss)
-        isLPCache[adderss] = True
+        Lp.objects.get(address=address)
+        isLPCache[address] = True
         return True
     except:
         try:
-            contract = web3.eth.contract(address=adderss, abi=isLP_abi)
+            contract = web3.eth.contract(address=address, abi=isLP_abi)
             #need to put .call() at the end to call the smart contract
             symbol = contract.functions.symbol().call()
             print(symbol)
             if symbol=="Cake-LP":
-                Lp.objects.create(address=adderss,symbol=symbol)
-                isLPCache[adderss] = True
+                Lp.objects.create(address=address,symbol=symbol)
+                isLPCache[address] = True
                 return True
             else:
-                isLPCache[adderss] = False
+                isLPCache[address] = False
                 return False
         except:
             return False
