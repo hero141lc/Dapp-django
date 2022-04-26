@@ -73,11 +73,13 @@ def create(request):
     cookies = request.COOKIES
     print("cookies",cookies)
     #print(res)
-    for cookie_key,cookie_value in cookies.items():
-        print(cookie_key,cookie_value)
+    
+    cookie_value = cookies['context']
     cookie_value=eval(cookie_value)
+    # for _cookie_key,_cookie_value in cookies.items():
+    #     print(_cookie_key,_cookie_value)
 
-    print("cookie_value['firstTime']",cookie_value['firstTime'])
+    #print("cookie_value['firstTime']",cookie_value['firstTime'])
     if ('profits' in cookie_value) and int(cookie_value['profits'])>0:
         posterUrl=win(cookies)
     else:
