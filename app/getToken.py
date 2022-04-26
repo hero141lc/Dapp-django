@@ -184,7 +184,7 @@ def getPriceFromPancake(tokenAddr):
         return -1
 
 
-async def newData(contenst,yearsAgo,toDate):
+def newData(contenst,yearsAgo,toDate):
     start_time = time.time()
     #fromDate = '2022-03-14'
     #toDate = '2022-04-15'
@@ -195,14 +195,14 @@ async def newData(contenst,yearsAgo,toDate):
     res = requests.get(URL).text
     data=json.loads(res)['data'][0]
     priceList = data['prices']
-    npixiu = False
-    if piXiu(contenst) != 0:
-        npixiu = True
-    print("npixiu",npixiu)
-    tokenOb= Token.objects.create(decimals=int(data['contract_decimals']),name=data['contract_name'],symbol=data['contract_ticker_symbol'],logo_url=data['logo_url'],address=data['contract_address'],update_at=datetime.datetime.strptime(data['update_at'][0:11], "%Y-%m-%dT"),quote_currency=data['quote_currency'],pixiu=npixiu)
+    # npixiu = False
+    # if piXiu(contenst) != 0:
+    #     npixiu = True
+    # print("npixiu",npixiu)
+    tokenOb= Token.objects.create(decimals=int(data['contract_decimals']),name=data['contract_name'],symbol=data['contract_ticker_symbol'],logo_url=data['logo_url'],address=data['contract_address'],update_at=datetime.datetime.strptime(data['update_at'][0:11], "%Y-%m-%dT"),quote_currency=data['quote_currency'])
     
     for item in priceList:
-        usedPrice = price=item['price']        
+        usedPrice=item['price']        
         Prices.objects.create(date=datetime.datetime.strptime(item['date'][0:10], "%Y-%m-%d"),price=usedPrice, Token=tokenOb)
     print('New Coin Added Successed:',data['contract_ticker_symbol'],data['update_at'])
     end_time = time.time()
@@ -241,7 +241,8 @@ def exSql(contenst):
 
         else:
             return tokenOb
-    except:
+    except Exception as e:
+        print("exSql failed:",e)
         yearsAgo=(timeNow-datetime.timedelta(days=365)).date().isoformat()
         try: 
             data=newData(contenst,yearsAgo,toDate)
@@ -258,7 +259,7 @@ def filterToFrom(item):
     if "to" not in item or "from" not in item:
         return 1
 
-    if "contractAddress" not in item ||   item["contractAddress"] in ban_token:
+    if "contractAddress" not in item or  item["contractAddress"] in ban_token:
         return 1
 
     userWalletAddress = item["userAddress"]
@@ -307,7 +308,7 @@ def getOrder(address):
     minName=''
     maxName=''
     sellAll=[]
-    peakPrice=0
+    maxPriceSince=0
     maifeiAll=0
     maxMaifeiCoin=''
     maifeiPeak=0
@@ -349,87 +350,106 @@ def getOrder(address):
     print("Important:Foreach Item: {:.2f}S".format(end_time - start_time))
 
     #all contract of this wallet.
-    allTokens = buyTokenList & sellTokenList
+    allTokens = buyTokenList | sellTokenList
 
     #save or update token info to db.
-    pool.map(asyncExSql, allTokens)
+    pool.map(exSql, allTokens)
 
     end_time = time.time()
     print("Important:saveOrupdate token: {:.2f}S".format(end_time - start_time))
 
-
+    tokenPriceDict = {}
     for _token in allTokens:
-
         #query token info from mysql.
         toeknObject= exSql(_token)
         if toeknObject==1:
             print("ERROR",toeknObject)
-            break
-        
+            continue
+
         # get price of the token pre day.
-        dailyPrices=Prices.objects.filter(Token=toeknObject).values()
-
+        dailyPrices=Prices.objects.filter(Token=toeknObject).values()        
         for dailyPrice in dailyPrices:
-            for buyTrx in buyTrxList:
-                if buyTrx['contractAddress'] == toeknObject.address:
-                #and 'LP' not in buyTrx['tokenSymbol']:
-                    if buyTrx['time'].date()==dailyPrice['date'].date():
-                        try:
+            tokenPrices={}
+            if _token in tokenPriceDict:
+                tokenPrices=tokenPriceDict[_token]
+            tokenPrices[dailyPrice['date'].date()] = dailyPrice
+            tokenPriceDict[_token] = tokenPrices
 
-                            buyTrx['amount']=int(buyTrx['value']*dailyPrice['price'])
-                            peakPrice=Prices.objects.filter(Q(Token=toeknObject)&Q(date__gt=dailyPrice['date'])).aggregate(Max('price'))['price__max']
-                            
-                            #Maifei
-                            maifeiAmount=int(buyTrx['value']*peakPrice)-buyTrx['amount']
-                            maifeiAll+=maifeiAmount
+    for buyTrx in buyTrxList:
+        tokenAddr = buyTrx['contractAddress']
+        if tokenAddr in tokenPriceDict and buyTrx['time'].date() in tokenPriceDict[tokenAddr]:
+        #and 'LP' not in buyTrx['tokenSymbol']:
+            buyPrice = tokenPriceDict[tokenAddr][buyTrx['time'].date()]
+        else:
+            continue
 
-                            totalBuyAmount+=buyTrx['amount']
+        try:
+            decimal =int(buyTrx["tokenDecimal"])
+            buyTrx['amount']=int((buyTrx['value']*buyPrice["price"])/10**decimal)
 
-                            if buyTrx['amount'] > maxBuyAmount:
-                                maxBuyAmount = buyTrx['amount']
+            prices = tokenPriceDict[_token]
 
-                            if maifeiAmount > 0 and maifeiAmount > maifeiPeak:
-                                maifeiPeak = maifeiAmount
-                                maxMaifeiCoin=buyTrx['tokenSymbol']
-                                buyAmountOfMax_Maifei=buyTrx['amount']
+            maxPriceSince = buyPrice
+            for key in prices:
+                if key >=buyTrx['time'].date() and prices[key]["price"]>maxPriceSince["price"]:
+                    maxPriceSince = prices[key]
+            
+            #Maifei
+            maifeiAmount=int(buyTrx['value']*maxPriceSince["price"])/10**decimal-buyTrx['amount']
+            maifeiAll+=maifeiAmount
 
-                            simpleBuy=simpleBuyDict.get(buyTrx['contractAddress'])
-                            if simpleBuy==None:
-                                simpleBuyDict[buyTrx['contractAddress']]={
-                                    'name':buyTrx['tokenSymbol'],
-                                    'address':buyTrx['contractAddress'],
-                                    'amount':buyTrx['amount'],
-                                }
-                            else:
-                                simpleBuy['amount']+=buyTrx['amount']
+            totalBuyAmount+=buyTrx['amount']
 
-                        except Exception as e:
-                            print("ERROR:",e)
-                            print("contractAddress:",buyTrx['contractAddress'])
-                            print("tokenSymbol",buyTrx['tokenSymbol'])
+            if buyTrx['amount'] > maxBuyAmount:
+                maxBuyAmount = buyTrx['amount']
 
-               
-            for sellTrx in sellTrxList:
-                if sellTrx['contractAddress'] == toeknObject.address:
-                   
-                    if sellTrx['time'].date()==dailyPrice['date'].date():
-                    
-                        sellTrx['amount']=int(sellTrx['value']*dailyPrice['price'])
-              
-                        totalSellAmount+=sellTrx['amount']
-                        if sellTrx['amount']>maxSellAmount:
-                            maxSellAmount=sellTrx['amount']
+            if maifeiAmount > 0 and maifeiAmount > maifeiPeak:
+                maifeiPeak = maifeiAmount
+                maxMaifeiCoin=buyTrx['tokenSymbol']
+                buyAmountOfMax_Maifei=buyTrx['amount']
 
-                        simpleSell=simpleSellDict.get(sellTrx['contractAddress'])
-              
-                        if simpleSell==None:
-                            simpleSellDict[sellTrx['contractAddress']]={
-                                'name':sellTrx['tokenSymbol'],
-                                'address':sellTrx['contractAddress'],
-                                'amount':sellTrx['amount'],
-                            }
-                        else:
-                            simpleSell['amount']+=sellTrx['amount']
+            simpleBuy=simpleBuyDict.get(buyTrx['contractAddress'])
+            if simpleBuy==None:
+                simpleBuyDict[buyTrx['contractAddress']]={
+                    'name':buyTrx['tokenSymbol'],
+                    'address':buyTrx['contractAddress'],
+                    'amount':buyTrx['amount'],
+                }
+            else:
+                simpleBuy['amount']+=buyTrx['amount']
+
+        except Exception as e:
+            print("ERROR:",e)
+            print("contractAddress:",buyTrx['contractAddress'])
+            print("tokenSymbol",buyTrx['tokenSymbol'])
+    
+    for sellTrx in sellTrxList:
+        tokenAddr = sellTrx['contractAddress']
+
+        if tokenAddr in tokenPriceDict and sellTrx['time'].date() in tokenPriceDict[tokenAddr]:
+        #and 'LP' not in buyTrx['tokenSymbol']:
+            sellPrice = tokenPriceDict[tokenAddr][sellTrx['time'].date()]
+        else:
+            continue
+        
+        decimal =int(sellTrx["tokenDecimal"])
+        sellTrx['amount']=int((sellTrx['value']*sellPrice["price"])/10**decimal)
+
+        totalSellAmount+=sellTrx['amount']
+        if sellTrx['amount']>maxSellAmount:
+            maxSellAmount=sellTrx['amount']
+
+        simpleSell=simpleSellDict.get(sellTrx['contractAddress'])
+
+        if simpleSell==None:
+            simpleSellDict[sellTrx['contractAddress']]={
+                'name':sellTrx['tokenSymbol'],
+                'address':sellTrx['contractAddress'],
+                'amount':sellTrx['amount'],
+            }
+        else:
+            simpleSell['amount']+=sellTrx['amount']
+
     #First buying Coin 
     buyTrxList.sort(key=lambda x:x['time'])
 
@@ -468,7 +488,7 @@ def getOrder(address):
 
     months=12
 
-    brickDays=int(profits/1e19/32)
+    brickDays=int(profits/32)
     if profits>0:
         winne=1
     else:
@@ -477,23 +497,23 @@ def getOrder(address):
     context={
         'months':months,
         'times':times,
-        'profitsMax':abs(int(profitsMax/1e18)),
-        'profitsMin':abs(int(profitsMin/1e18)),
+        'profitsMax':abs(int(profitsMax)),
+        'profitsMin':abs(int(profitsMin)),
         'minName':minName,
         'maxName':maxName,
         'brickDays':abs(int(brickDays)),
         'maifeiWho':maxMaifeiCoin,
-        'maifeiPeak':abs(int(maifeiPeak/1e18)),
-        'profits':abs(int(profits/1e18)),
-        'maifei':abs(int(maifeiAll/1e18)),
+        'maifeiPeak':abs(int(maifeiPeak)),
+        'profits':abs(int(profits)),
+        'maifei':abs(int(maifeiAll)),
         'winne':winne,
         'howManyPixiu':pixiuKing[0],
         'piXiuName':pixiuKing[2],
         'piXiuPrice':abs(int(pixiuKing[1]/1e18)),
-        'buyAmountOfMax_Maifei':abs(int(buyAmountOfMax_Maifei/1e18)),
+        'buyAmountOfMax_Maifei':abs(int(buyAmountOfMax_Maifei)),
         'firstCoin':latestItem['tokenSymbol'],
         'firstTime':latestItem['firstTime'],
-        'firstPrice':round(latestItem['amount']/1e18,2),
+        'firstPrice':round(latestItem['amount'],2),
     }
     end_time = time.time()
     print("Important:Result: {:.2f}S".format(end_time - start_time))

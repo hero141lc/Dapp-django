@@ -1,5 +1,5 @@
 from email.headerregistry import Address
-from MySQLdb import Date
+#from MySQLdb import Date
 from django.db import models
 
 import django.utils.timezone as timezone
