@@ -391,26 +391,10 @@ def getOrder(address):
             decimal =int(buyTrx["tokenDecimal"])
             buyTrx['amount']=int((buyTrx['value']*buyPrice["price"])/10**decimal)
 
-            prices = tokenPriceDict[_token]
-
-            maxPriceSince = buyPrice
-            for key in prices:
-                if key >=buyTrx['time'].date() and prices[key]["price"]>maxPriceSince["price"]:
-                    maxPriceSince = prices[key]
-            
-            #Maifei
-            maifeiAmount=int(buyTrx['value']*maxPriceSince["price"])/10**decimal-buyTrx['amount']
-            maifeiAll+=maifeiAmount
-
             totalBuyAmount+=buyTrx['amount']
 
             if buyTrx['amount'] > maxBuyAmount:
                 maxBuyAmount = buyTrx['amount']
-
-            if maifeiAmount > 0 and maifeiAmount > maifeiPeak:
-                maifeiPeak = maifeiAmount
-                maxMaifeiCoin=buyTrx['tokenSymbol']
-                buyAmountOfMax_Maifei=buyTrx['amount']
 
             simpleBuy=simpleBuyDict.get(buyTrx['contractAddress'])
             if simpleBuy==None:
@@ -435,9 +419,30 @@ def getOrder(address):
             sellPrice = tokenPriceDict[tokenAddr][sellTrx['time'].date()]
         else:
             continue
+
+        maxPriceSince = sellPrice
         
         decimal =int(sellTrx["tokenDecimal"])
         sellTrx['amount']=int((sellTrx['value']*sellPrice["price"])/10**decimal)
+
+        prices = tokenPriceDict[tokenAddr]
+        for key in prices:
+            if key >=sellTrx['time'].date() and prices[key]["price"]>maxPriceSince["price"]:
+                maxPriceSince = prices[key]
+        
+        #Maifei
+        print("maxPriceSince:",maxPriceSince["price"],sellPrice['price'])
+        if maxPriceSince['price']/sellPrice['price'] > 50:
+            maxPriceSince = sellPrice
+
+        maifeiAmount=int(sellTrx['value']*maxPriceSince["price"])/10**decimal-sellTrx['amount']
+        maifeiAll+=maifeiAmount
+        print("maifei:",maifeiAmount," totalmaifei",maifeiAll)
+
+        if maifeiAmount > 0 and maifeiAmount > maifeiPeak:
+            maifeiPeak = maifeiAmount
+            maxMaifeiCoin=sellTrx['tokenSymbol']
+            buyAmountOfMax_Maifei=sellTrx['amount']
 
         totalSellAmount+=sellTrx['amount']
         if sellTrx['amount']>maxSellAmount:
