@@ -432,7 +432,7 @@ def getOrder(address):
         
         #Maifei
         print("maxPriceSince:",maxPriceSince["price"],sellPrice['price'])
-        if maxPriceSince['price']/sellPrice['price'] > 50:
+        if maxPriceSince['price']/(sellPrice['price']+float("1e-8")) > 50:
             maxPriceSince = sellPrice
 
         maifeiAmount=int(sellTrx['value']*maxPriceSince["price"])/10**decimal-sellTrx['amount']
