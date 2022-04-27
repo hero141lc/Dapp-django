@@ -53,6 +53,8 @@ def result(request):
     address=request.GET['address']
     print(request.GET['address'])
     context=getOrder(address)
+    if context["status"]!=None and context["status"]=='doing':
+        return render(request, 'app/wait.html')
     context_result=copy.deepcopy(context) 
     
     if context_result['firstTime']!='':
