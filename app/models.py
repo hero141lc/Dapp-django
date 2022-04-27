@@ -18,6 +18,7 @@ class Token(models.Model):
 class Lp(models.Model):
     symbol=models.CharField(max_length=50,null=True, blank=True)
     address= models.CharField(max_length=50,unique=True,primary_key=True)
+    isLp=models.BooleanField(null=True, blank=True)
 class Prices(models.Model):
     Token = models.ForeignKey(Token, on_delete=models.CASCADE)
     date = models.DateTimeField(default = timezone.now)

@@ -124,9 +124,13 @@ def isLP(addr):
     if addr in isLPCache:
         #print("isLP hit in cache",isLPCache[addr],addr)
         return isLPCache[addr]
-    if Lp.objects.filter(address=addr).count()>0:
+    lpData=Lp.objects.filter(address=addr)
+    if lpData.count()>0:
+        if lpData[0].isLp:
         #isLPCache[addr] = True
-        return True
+            return True
+        else:
+            return False
     try:
         contract = web3.eth.contract(address=addr, abi=isLP_abi)
         #need to put .call() at the end to call the smart contract
