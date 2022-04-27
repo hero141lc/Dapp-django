@@ -289,7 +289,7 @@ def getOrder(address):
     #query from db.
     bills=daily_bill.objects.filter(bill_key=contextKey)
     if bills.count()>0:
-        queryedContext = bills[0].value
+        queryedContext = bills[0].bill_value
         billCache.set(contextKey, queryedContext, expires=7200)
         return queryedContext
 
