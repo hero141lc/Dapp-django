@@ -51,7 +51,8 @@ def win(paramsa):
     params["maifeiWho"]=str(paramsa["maifeiWho"])
     params["maifeiPeak"]=str(paramsa["maifeiPeak"])+'$'
     params["firstPrice"]=str(paramsa["firstPrice"])+'$'
-
+    params['firstTime'] = str(params['firstTime']).replace('-', '年', 1)
+    params['firstTime'] = params['firstTime'].replace('-', '月', 1)+'日'
 
     
     url = api.getUrl('11', params)
