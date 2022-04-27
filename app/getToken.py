@@ -17,6 +17,8 @@ from multiprocessing.pool import ThreadPool
 import multiprocessing
 import random
 
+from concurrent.futures import ThreadPoolExecutor
+
 
 MAX_TRANSACTION_COUNT = 300
 
@@ -48,6 +50,8 @@ ban_token = ['0xe9e7cea3dedca5984780bafc599bd69add087d56','0x55d398326f99059ff77
 isLPCache = {}
 
 billCache = LocalCache(max_size=5000000)
+
+pool = ThreadPoolExecutor(max_workers=20)
 
 def detectFee(pair_addr,token_addr,base_token_addr):
     return bot_contract.functions.detectFee(pair_addr,token_addr,base_token_addr,10000000000000000).call()
@@ -292,7 +296,7 @@ def getOrder(address):
     if len(data) > MAX_TRANSACTION_COUNT:
         try:
             daily_bill.objects.create(bill_key=contextKey,status="doing",bill_value="")
-            asyncCreateContext(address,contextKey,data)
+            pool.submit(createContext,address,contextKey,data)
         except Exception as e:
             print("create bill failed:",contextKey,e)
 
@@ -300,9 +304,6 @@ def getOrder(address):
 
     context =createContext(address,contextKey,data)
     return context
-
-async def asyncCreateContext(address,contextKey,data):
-    createContext(address,contextKey,data)
 
 def createContext(address,contextKey,data):
     sellTrxList=[]
