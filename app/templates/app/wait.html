@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>快来查看你的土狗账单~</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+  <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <style>
+        .init-loading-home {
+            background-color: #303133;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .init-loading-main {
+            user-select: none;
+            width: 100%;
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .init-loading-title {
+            color: #FFF;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .init-loading-sub-title {
+            color: #ABABAB;
+            font-size: 12px;
+        }
+        .init-loading-footer {
+            width: 100%;
+            flex-grow: 0;
+            text-align: center;
+            padding: 1em 0;
+        }
+        .loader-first {
+            font-size: 10px;
+            margin: 100px auto;
+            width: 1em;
+            height: 1em;
+            border-radius: 50%;
+            text-indent: -9999em;
+            position: relative;
+            animation: mymove 1.3s infinite linear;
+            -webkit-animation: mymove 1.5s infinite linear;
+            -webkit-transform: translateZ(0);
+            -ms-transform: translateZ(0);
+            transform: translateZ(0);
+        }
+
+        @keyframes mymove {
+            0%,
+            100% {
+                box-shadow: 0 -3em 0 0.2em #46A4C9, 2em -2em 0 0em #46A4C9, 3em 0 0 -1em #46A4C9, 2em 2em 0 -1em #46A4C9, 0 3em 0 -1em #46A4C9, -2em 2em 0 -1em #46A4C9, -3em 0 0 -1em #46A4C9, -2em -2em 0 0 #46A4C9;
+            }
+            12.5% {
+                box-shadow: 0 -3em 0 0 #46A4C9, 2em -2em 0 0.2em #46A4C9, 3em 0 0 0 #46A4C9, 2em 2em 0 -1em #46A4C9, 0 3em 0 -1em #46A4C9, -2em 2em 0 -1em #46A4C9, -3em 0 0 -1em #46A4C9, -2em -2em 0 -1em #46A4C9;
+            }
+            25% {
+                box-shadow: 0 -3em 0 -0.5em #46A4C9, 2em -2em 0 0 #46A4C9, 3em 0 0 0.2em #46A4C9, 2em 2em 0 0 #46A4C9, 0 3em 0 -1em #46A4C9, -2em 2em 0 -1em #46A4C9, -3em 0 0 -1em #46A4C9, -2em -2em 0 -1em #46A4C9;
+            }
+            37.5% {
+                box-shadow: 0 -3em 0 -1em #46A4C9, 2em -2em 0 -1em #46A4C9, 3em 0em 0 0 #46A4C9, 2em 2em 0 0.2em #46A4C9, 0 3em 0 0em #46A4C9, -2em 2em 0 -1em #46A4C9, -3em 0em 0 -1em #46A4C9, -2em -2em 0 -1em #46A4C9;
+            }
+            50% {
+                box-shadow: 0 -3em 0 -1em #46A4C9, 2em -2em 0 -1em #46A4C9, 3em 0 0 -1em #46A4C9, 2em 2em 0 0em #46A4C9, 0 3em 0 0.2em #46A4C9, -2em 2em 0 0 #46A4C9, -3em 0em 0 -1em #46A4C9, -2em -2em 0 -1em #46A4C9;
+            }
+            62.5% {
+                box-shadow: 0 -3em 0 -1em #46A4C9, 2em -2em 0 -1em #46A4C9, 3em 0 0 -1em #46A4C9, 2em 2em 0 -1em #46A4C9, 0 3em 0 0 #46A4C9, -2em 2em 0 0.2em #46A4C9, -3em 0 0 0 #46A4C9, -2em -2em 0 -1em #46A4C9;
+            }
+            75% {
+                box-shadow: 0em -3em 0 -1em #46A4C9, 2em -2em 0 -1em #46A4C9, 3em 0em 0 -1em #46A4C9, 2em 2em 0 -1em #46A4C9, 0 3em 0 -1em #46A4C9, -2em 2em 0 0 #46A4C9, -3em 0em 0 0.2em #46A4C9, -2em -2em 0 0 #46A4C9;
+            }
+            87.5% {
+                box-shadow: 0em -3em 0 0 #46A4C9, 2em -2em 0 -1em #46A4C9, 3em 0 0 -1em #46A4C9, 2em 2em 0 -1em #46A4C9, 0 3em 0 -1em #46A4C9, -2em 2em 0 0 #46A4C9, -3em 0em 0 0 #46A4C9, -2em -2em 0 0.2em #46A4C9;
+            }
+        }
+
+        @-webkit-keyframes mymove
+            /*Safari and Chrome*/
+        {
+            0%,
+            100% {
+                box-shadow: 0 -3em 0 0.2em #46A4C9, 2em -2em 0 0em #46A4C9, 3em 0 0 -1em #46A4C9, 2em 2em 0 -1em #46A4C9, 0 3em 0 -1em #46A4C9, -2em 2em 0 -1em #46A4C9, -3em 0 0 -1em #46A4C9, -2em -2em 0 0 #46A4C9;
+            }
+            12.5% {
+                box-shadow: 0 -3em 0 0 #46A4C9, 2em -2em 0 0.2em #46A4C9, 3em 0 0 0 #46A4C9, 2em 2em 0 -1em #46A4C9, 0 3em 0 -1em #46A4C9, -2em 2em 0 -1em #46A4C9, -3em 0 0 -1em #46A4C9, -2em -2em 0 -1em #46A4C9;
+            }
+            25% {
+                box-shadow: 0 -3em 0 -0.5em #46A4C9, 2em -2em 0 0 #46A4C9, 3em 0 0 0.2em #46A4C9, 2em 2em 0 0 #46A4C9, 0 3em 0 -1em #46A4C9, -2em 2em 0 -1em #46A4C9, -3em 0 0 -1em #46A4C9, -2em -2em 0 -1em #46A4C9;
+            }
+            37.5% {
+                box-shadow: 0 -3em 0 -1em #46A4C9, 2em -2em 0 -1em #46A4C9, 3em 0em 0 0 #46A4C9, 2em 2em 0 0.2em #46A4C9, 0 3em 0 0em #46A4C9, -2em 2em 0 -1em #46A4C9, -3em 0em 0 -1em #46A4C9, -2em -2em 0 -1em #46A4C9;
+            }
+            50% {
+                box-shadow: 0 -3em 0 -1em #46A4C9, 2em -2em 0 -1em #46A4C9, 3em 0 0 -1em #46A4C9, 2em 2em 0 0em #46A4C9, 0 3em 0 0.2em #46A4C9, -2em 2em 0 0 #46A4C9, -3em 0em 0 -1em #46A4C9, -2em -2em 0 -1em #46A4C9;
+            }
+            62.5% {
+                box-shadow: 0 -3em 0 -1em #46A4C9, 2em -2em 0 -1em #46A4C9, 3em 0 0 -1em #46A4C9, 2em 2em 0 -1em #46A4C9, 0 3em 0 0 #46A4C9, -2em 2em 0 0.2em #46A4C9, -3em 0 0 0 #46A4C9, -2em -2em 0 -1em #46A4C9;
+            }
+            75% {
+                box-shadow: 0em -3em 0 -1em #46A4C9, 2em -2em 0 -1em #46A4C9, 3em 0em 0 -1em #46A4C9, 2em 2em 0 -1em #46A4C9, 0 3em 0 -1em #46A4C9, -2em 2em 0 0 #46A4C9, -3em 0em 0 0.2em #46A4C9, -2em -2em 0 0 #46A4C9;
+            }
+            87.5% {
+                box-shadow: 0em -3em 0 0 #46A4C9, 2em -2em 0 -1em #46A4C9, 3em 0 0 -1em #46A4C9, 2em 2em 0 -1em #46A4C9, 0 3em 0 -1em #46A4C9, -2em 2em 0 0 #46A4C9, -3em 0em 0 0 #46A4C9, -2em -2em 0 0.2em #46A4C9;
+            }
+        }
+
+    </style>
+    <script>
+        function hiddenInitLoading(){
+            document.getElementById("loading-app").style.display = 'none'
+        }
+    </script>
+    <div class="init-loading-home" id="loading-app">
+        <div class="init-loading-main">
+            <div class='loader-first'></div>
+            <div class="init-loading-title">正在加载资源</div>
+            <div class="init-loading-sub-title">初次加载资源可能需要较多时间 请耐心等待</div>
+        </div>
+        <div class="init-loading-footer">
+            
+        </div>
+    </div>
+    <div class="container">
+        <div>
+
+        </div>
+    </div>
+</body>

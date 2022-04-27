@@ -27,6 +27,7 @@ class daily_bill(models.Model):
     id=models.AutoField(primary_key=True)
     bill_key = models.CharField(max_length=255,null=True, blank=True,db_index = True)
     bill_value=models.JSONField()
+    status = models.CharField(max_length=32,null=True, blank=True)
 class Wallet(models.Model):
     address = models.CharField(max_length=50,unique=True,primary_key=True)
     updated_at =models.DateTimeField(default = timezone.now)
