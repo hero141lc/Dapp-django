@@ -287,7 +287,7 @@ def getOrder(address):
         return contextInCache
 
     #query from db.
-    bills=daily_bill.objects.filter(key=contextKey)
+    bills=daily_bill.objects.filter(bill_key=contextKey)
     if bills.count()>0:
         queryedContext = bills[0].value
         billCache.set(contextKey, queryedContext, expires=7200)
@@ -556,7 +556,7 @@ def getOrder(address):
 
     #add to cache and db.
     billCache.set(contextKey, context, expires=7200)
-    daily_bill.objects.create(key=contextKey,value=context)
+    daily_bill.objects.create(bill_key=contextKey,bill_value=context)
 
     end_time = time.time()
     print("Important:Result: {:.2f}S".format(end_time - start_time))
