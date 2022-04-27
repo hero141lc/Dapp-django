@@ -58,7 +58,6 @@ def result(request):
     if context_result['firstTime']!='':
         context_result['firstTime'] = str(context_result['firstTime']).replace('-', '年', 1)
         context_result['firstTime'] = context_result['firstTime'].replace('-', '月', 1)+'日'
-    print(context_result)
     print(context)
     response =render(request, 'app/result.html',context_result)
     response.set_cookie('context', str(context), max_age= 60*5, expires=None,domain=None, secure=False, httponly=False, samesite=None)
