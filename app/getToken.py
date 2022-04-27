@@ -279,20 +279,20 @@ def filterToFrom(item):
     return 1
 
 def getOrder(address):
-    contextKey = address+"-"+date.today().isoformat()
+    contextKey = address.lower()+"-"+date.today().isoformat()
 
     #query from cache
     contextInCache = billCache.get(contextKey)
     if contextInCache != None:
         return contextInCache
 
-    #todo: taixu
-    #1: 从数据库查询
-    #2: 如果查到结果，就加入缓存contextInCache,  并且直接返回结果
-    #3: 如果没有流程继续向下走
-    last_bill=daily_bill.objects.filter(key=contextKey)
-    if last_bill.count()>0:
-        return eval(last_bill[0].value)
+    #query from db.
+    bills=daily_bill.objects.filter(key=contextKey)
+    if bills.count()>0:
+        queryedContext = eval(bills[0].value)
+        billCache.set(contextKey, queryedContext, expires=7200)
+        return queryedContext
+
     # Global
     sellTrxList=[]
     buyTrxList=[]
@@ -530,6 +530,7 @@ def getOrder(address):
         maifeiAll=(random.randint(1000000,2000000))
     if abs(int(maifeiPeak))>2000000:
         maifeiPeak=(random.randint(100000,300000))
+
     brickDays=int(profits/32)
     context={
         'months':months,
@@ -553,9 +554,8 @@ def getOrder(address):
         'firstPrice':round(latestItem['amount'],2),
     }
 
+    #add to cache and db.
     billCache.set(contextKey, context, expires=7200)
-    #todo: taixu
-    #1: 插入到数据库数据库，表名daily_bill,字段(key(vachar类型),value(json类型))
     daily_bill.objects.create(key=contextKey,value=context)
 
     end_time = time.time()
