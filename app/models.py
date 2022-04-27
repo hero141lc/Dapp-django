@@ -1,4 +1,5 @@
 from email.headerregistry import Address
+from venv import create
 #from MySQLdb import Date
 from django.db import models
 import django.utils.timezone as timezone
@@ -28,6 +29,9 @@ class daily_bill(models.Model):
     bill_key = models.CharField(max_length=255,null=True, blank=True,db_index = True)
     bill_value=models.JSONField()
     status = models.CharField(max_length=32,null=True, blank=True)
+    updated_at =models.DateTimeField(default = timezone.now)
+    created_at = models.DateTimeField(auto_now = True)
+
 class Wallet(models.Model):
     address = models.CharField(max_length=50,unique=True,primary_key=True)
     updated_at =models.DateTimeField(default = timezone.now)

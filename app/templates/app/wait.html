@@ -4,16 +4,23 @@
   <title>快来查看你的土狗账单~</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
-  <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
-  <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<!-- 新 Bootstrap4 核心 CSS 文件 -->
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+ 
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+ 
+<!-- bootstrap.bundle.min.js 用于弹窗、提示、下拉菜单，包含了 popper.min.js -->
+<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+ 
+<!-- 最新的 Bootstrap4 核心 JavaScript 文件 -->
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </head>
 <body>
     <style>
         .init-loading-home {
-            background-color: #303133;
-            height: 100%;
+            background-color: gray;
+            height: 100vh;
             display: flex;
             flex-direction: column;
         }
@@ -28,11 +35,11 @@
         }
         .init-loading-title {
             color: #FFF;
-            font-size: 14px;
-            margin-bottom: 10px;
+            font-size: 2rem;
+            margin-bottom: 2rem;
         }
         .init-loading-sub-title {
-            color: #ABABAB;
+            color: #FFF;
             font-size: 12px;
         }
         .init-loading-footer {
@@ -125,14 +132,15 @@
             <div class='loader-first'></div>
             <div class="init-loading-title">正在加载资源</div>
             <div class="init-loading-sub-title">初次加载资源可能需要较多时间 请耐心等待</div>
+            <div class="container">
+                <div class="row">
+                    <button class="btn btn-lg">s</button>
+                    <button class="btn btn-lg">s</button>
+                </div>
+            </div>
         </div>
         <div class="init-loading-footer">
             
-        </div>
-    </div>
-    <div class="container">
-        <div>
-
         </div>
     </div>
 </body>
