@@ -12,6 +12,7 @@ from .models import Token,Prices
 # Diy Function
 from app.getToken import *
 from app.poster import *
+import copy
 # Create your views here.
 pancakeAddr='0x10ed43c718714eb63d5aa57b78b54704e256024e'
 def index(request):
@@ -52,16 +53,15 @@ def result(request):
     address=request.GET['address']
     print(request.GET['address'])
     context=getOrder(address)
+    context_result=copy.deepcopy(context) 
+    
+    if context_result['firstTime']!='':
+        context_result['firstTime'] = str(context_result['firstTime']).replace('-', '年', 1)
+        context_result['firstTime'] = context_result['firstTime'].replace('-', '月', 1)+'日'
     print(context)
-    response =render(request, 'app/result.html',context)
-   
-    response.set_cookie('context', str(context), max_age=None, expires=None,domain=None, secure=False, httponly=False, samesite=None)
+    response =render(request, 'app/result.html',context_result)
+    response.set_cookie('context', str(context), max_age= 60*5, expires=None,domain=None, secure=False, httponly=False, samesite=None)
     print()
-    if context['firstTime']=='':
-        return response
-    context['firstTime'] = str(context['firstTime']).replace('-', '年', 1)
-    context['firstTime'] = context['firstTime'].replace('-', '月', 1)+'日'
-    response =render(request, 'app/result.html',context)
     return response
 
 def create(request):

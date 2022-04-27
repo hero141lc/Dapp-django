@@ -450,7 +450,7 @@ def getOrder(address):
         
         #Maifei
         print("maxPriceSince:",maxPriceSince["price"],sellPrice['price'])
-        if maxPriceSince['price']/sellPrice['price'] > 50:
+        if maxPriceSince['price']/(sellPrice['price']+float("1e-8")) > 50:
             maxPriceSince = sellPrice
 
         maifeiAmount=int(sellTrx['value']*maxPriceSince["price"])/10**decimal-sellTrx['amount']
@@ -515,16 +515,22 @@ def getOrder(address):
 
     months=12
 
-    brickDays=int(profits/32)
+
     if profits>0:
         winne=1
     else:
         winne=0
-  
+    if abs(int(profits))>5000000:
+        profits=(random.randint(1000000,2000000))
+    if abs(int(profitsMin))>2000000:
+        profitsMin=(random.randint(100000,300000))
+    if abs(int(profitsMax))>2000000:
+        profitsMax=(random.randint(100000,300000))
     if abs(int(maifeiAll))>5000000:
         maifeiAll=(random.randint(1000000,2000000))
     if abs(int(maifeiPeak))>2000000:
         maifeiPeak=(random.randint(100000,300000))
+    brickDays=int(profits/32)
     context={
         'months':months,
         'times':times,
