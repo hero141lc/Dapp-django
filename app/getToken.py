@@ -137,10 +137,11 @@ def isLP(addr):
         symbol = contract.functions.symbol().call()
         print(symbol)
         if symbol=="Cake-LP":
-            Lp.objects.create(address=addr,symbol=symbol)
+            Lp.objects.create(address=addr,symbol=symbol,isLp=True)
             isLPCache[addr] = True
             return True
         else:
+            Lp.objects.create(address=addr,symbol=symbol,isLp=False)
             isLPCache[addr] = False
             return False
     except:
