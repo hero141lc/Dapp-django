@@ -16,9 +16,9 @@ import time
 from multiprocessing.pool import ThreadPool
 import multiprocessing
 import random
-import asyncio
 
-MAX_TRANSACTION_COUNT = 500
+
+MAX_TRANSACTION_COUNT = 300
 
 pancakeAddr='0x10ed43c718714eb63d5aa57b78b54704e256024e'
 
@@ -292,14 +292,17 @@ def getOrder(address):
     if len(data) > MAX_TRANSACTION_COUNT:
         try:
             daily_bill.objects.create(bill_key=contextKey,status="doing",bill_value="")
-            asyncio.run(createContext(address,contextKey,data))
-        except:
-            print("create bill failed:",contextKey)
+            asyncCreateContext(address,contextKey,data)
+        except Exception as e:
+            print("create bill failed:",contextKey,e)
 
         return {"status":"doing"}
 
-    context = createContext(address,data)
+    context =createContext(address,contextKey,data)
     return context
+
+async def asyncCreateContext(address,contextKey,data):
+    createContext(address,contextKey,data)
 
 def createContext(address,contextKey,data):
     sellTrxList=[]
@@ -560,7 +563,7 @@ def createContext(address,contextKey,data):
 
     #add to cache and db.
     billCache.set(contextKey, context, expires=7200)
-    daily_bill.objects.update_or_create(bill_key=contextKey,status="done",bill_value=context)
+    daily_bill.objects.update_or_create(defaults={'bill_value':context,'status':"done"},bill_key=contextKey)
 
     end_time = time.time()
     print("Important:Result: {:.2f}S".format(end_time - start_time))
