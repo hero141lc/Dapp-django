@@ -1,18 +1,9 @@
 # -*- coding: utf-8 -*-
-'''
 
-import datetime
-import django
-#django.setup()
-
-#from app.models.user import User
-
-'''
 import json
 from unittest import result
 import requests
 import datetime
-import asyncio
 
 from pylocache import LocalCache
 from sqlalchemy import false
@@ -25,7 +16,9 @@ import time
 from multiprocessing.pool import ThreadPool
 import multiprocessing
 import random
+import asyncio
 
+MAX_TRANSACTION_COUNT = 500
 
 pancakeAddr='0x10ed43c718714eb63d5aa57b78b54704e256024e'
 
@@ -172,17 +165,6 @@ def is_today(target_date):
         final = True
     print(final)
     return final
-'''
-狗王0x641ec142e67ab213539815f67e4276975c2f8d50
-搬砖0xc4893fea8547fb1a4d860518285af6655424645f
-狗撕拉0x7a565284572d03ec50c35396f7d6001252eb43b6
-babydoge0xc748673057861a797275cd8a068abb95a902e8de
-raca0x12bb890508c125661e03b09ec06e404bc9289040
-gmt0x7ddc52c4de30e94be3a6a0a2b259b2850f421989
-goma0xab14952d2902343fde7c65d7dc095e5c8be86920
-bnx0x8c851d1a123ff703bd1f9dabe631b69902df5f97
-bit0xc864019047b864b6ab609a968ae2725dfaee808a
-'''
 
 def getPriceFromPancake(tokenAddr):
     try:
@@ -294,32 +276,44 @@ def getOrder(address):
     #query from db.
     bills=daily_bill.objects.filter(bill_key=contextKey)
     if bills.count()>0:
+        if bills[0].status==None or bills[0].status=="doing":
+            return {"status":"doing"}
+
         queryedContext = bills[0].bill_value
         billCache.set(contextKey, queryedContext, expires=7200)
         return queryedContext
 
-    # Global
+    address=address.strip().replace('\n', '').replace('\r', '').lower()
+    addressRes='address='+address
+    URL='https://api.bscscan.com/api?module=account&action=tokentx&&'+addressRes+'&page=0&offset=1500&startblock=0&endblock=99999999999&sort=asc&apikey=TFD2ZDC1W77QAXP38SF9I1Z6T34GBGIGUJ'
+    res = requests.get(URL).text
+    data=json.loads(res)['result']
+
+    if len(data) > MAX_TRANSACTION_COUNT:
+        try:
+            daily_bill.objects.create(bill_key=contextKey,status="doing",bill_value="")
+            asyncio.run(createContext(address,contextKey,data))
+        except:
+            print("create bill failed:",contextKey)
+
+        return {"status":"doing"}
+
+    context = createContext(address,data)
+    return context
+
+def createContext(address,contextKey,data):
     sellTrxList=[]
     buyTrxList=[]
     sellTokenList=set()
     buyTokenList=set()
-    start_time = time.time()
-    address=address.strip().replace('\n', '').replace('\r', '').lower()
-    addressRes='address='+address
-    userWalletAddress= address
-    Token='contractaddress='
-    URL='https://api.bscscan.com/api?module=account&action=tokentx&&'+addressRes+'&page=0&offset=1500&startblock=0&endblock=99999999999&sort=asc&apikey=TFD2ZDC1W77QAXP38SF9I1Z6T34GBGIGUJ'
-    res = requests.get(URL).text
-    data=json.loads(res)['result']
+
     simpleSellDict={}
     simpleBuyDict={}
+
     newDict={}
+
     allTokens=set()
-    toPriceList=[]
-    fromPriceList=[]
-    pricesList=[]
-    income=0
-    expenditure=0
+
     times=0
     maxName=''
     minName=''
@@ -331,15 +325,19 @@ def getOrder(address):
     profitsMin=0
     minName=''
     maxName=''
-    sellAll=[]
+
     maxPriceSince=0
     maifeiAll=0
     maxMaifeiCoin=''
     maifeiPeak=0
     buyAmountOfMax_Maifei=0
     pixiuKing=[0,0,'']
+
     latestItem={}
     latestItem['tokenSymbol']=''
+
+    # Global
+    start_time = time.time()
 
     for item in data:
         item["userAddress"] = address
@@ -538,6 +536,7 @@ def getOrder(address):
 
     brickDays=int(profits/32)
     context={
+        "status":"done",
         'months':months,
         'times':times,
         'profitsMax':abs(int(profitsMax)),
@@ -561,11 +560,12 @@ def getOrder(address):
 
     #add to cache and db.
     billCache.set(contextKey, context, expires=7200)
-    daily_bill.objects.create(bill_key=contextKey,bill_value=context)
+    daily_bill.objects.update_or_create(bill_key=contextKey,status="done",bill_value=context)
 
     end_time = time.time()
     print("Important:Result: {:.2f}S".format(end_time - start_time))
     return context
+
 def howManyHoulder():
     start_time = time.time()
     token_addr="0xc4893fEa8547Fb1A4D860518285AF6655424645f"
