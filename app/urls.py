@@ -7,4 +7,5 @@ urlpatterns = [
     path('connectus', views.connectUs, name='connectUs'),
     path('result', views.result, name='result'),
     path('create', views.create, name='create'),
+    path('wait', views.wait, name='wait'),
 ]

@@ -103,3 +103,5 @@ def create(request):
     cookie_value['reserve']=round(int(res['token_0']['reserve'])/1e18,2)
     return render(request, 'app/create.html',cookie_value)
 
+def wait(request):
+    return render(request, 'app/wait.html')
