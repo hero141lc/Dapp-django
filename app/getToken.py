@@ -16,7 +16,7 @@ import asyncio
 
 from pylocache import LocalCache
 from sqlalchemy import false
-from .models import Token,Prices,Trans,Wallet,Lp
+from .models import Token,Prices,Trans,Wallet,Lp,daily_bill
 from django.db.models import Q,Max
 from web3 import Web3
 from datetime import date
@@ -124,8 +124,6 @@ def isLP(addr):
     if addr in isLPCache:
         #print("isLP hit in cache",isLPCache[addr],addr)
         return isLPCache[addr]
-    a=Lp.objects.filter(address=addr).count()
-    print(a)
     if Lp.objects.filter(address=addr).count()>0:
         #isLPCache[addr] = True
         return True
@@ -281,7 +279,7 @@ def filterToFrom(item):
     return 1
 
 def getOrder(address):
-    contextKey = address+"-"+date.today()
+    contextKey = address+"-"+date.today().isoformat()
 
     #query from cache
     contextInCache = billCache.get(contextKey)
@@ -292,7 +290,9 @@ def getOrder(address):
     #1: 从数据库查询
     #2: 如果查到结果，就加入缓存contextInCache,  并且直接返回结果
     #3: 如果没有流程继续向下走
-
+    last_bill=daily_bill.objects.filter(key=contextKey)
+    if last_bill.count()>0:
+        return eval(last_bill[0].value)
     # Global
     sellTrxList=[]
     buyTrxList=[]
@@ -556,7 +556,7 @@ def getOrder(address):
     billCache.set(contextKey, context, expires=7200)
     #todo: taixu
     #1: 插入到数据库数据库，表名daily_bill,字段(key(vachar类型),value(json类型))
-
+    daily_bill.objects.create(key=contextKey,value=context)
 
     end_time = time.time()
     print("Important:Result: {:.2f}S".format(end_time - start_time))
