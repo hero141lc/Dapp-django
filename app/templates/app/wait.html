@@ -111,7 +111,7 @@
         }
 
     function copyText() {
-      window.clipboardData.setData("Thttp://brickcn.xyz/app/",clipBoardContent);
+      window.clipboardData.setData("http://brickcn.xyz/app/",clipBoardContent);
     alert("复制成功!");
     }
     
@@ -262,7 +262,14 @@
             var formatdate =  h + ":" + f + ":" + s;
 
             $("#te").html(formatdate);
-    
+            
+function copyUrl(url) {
+        var oInput = document.createElement('input');
+        oInput.value = url;
+        document.body.appendChild(oInput);oInput.select(); // 选择对象
+        document.execCommand("Copy"); // 执行浏览器复制命令 oInput.className = 'oInput';
+        oInput.style.display='none';
+        layer.msg("链接已复制");}
 
         }); 
     </script>
@@ -300,7 +307,7 @@
             </div>
         </div>
 <div style="text-align: center; ">
-            <button type="button" onclick="copyText()" class="btn btn-primary" style="width: 10rem;background: #ED656A;box-shadow: inset 1px 2px 2px 0 rgba(255,255,255,0.39);border-radius: 49.5px;">复制链接</button>
+            <button type="button" onclick="http://brickcn.xyz/app/" class="btn btn-primary" style="width: 10rem;background: #ED656A;box-shadow: inset 1px 2px 2px 0 rgba(255,255,255,0.39);border-radius: 49.5px;">复制链接</button>
             <a href="http://brickcn.buzz" type="button" class="btn btn-secondary" style="width: 10rem;background: #ED656A;box-shadow: inset 1px 2px 2px 0 rgba(255,255,255,0.39);border-radius: 49.5px;">进入官网</a>
         </div>
 
