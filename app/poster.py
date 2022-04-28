@@ -66,7 +66,8 @@ def lose(paramsa):
     params["times"]=str(paramsa["times"])
     params["profits"]=str(paramsa["profits"])+'$'
     params["brickDays"]=str(paramsa["brickDays"])
-    params["firstTime"]=str(paramsa["firstTime"])
+    params['firstTime'] = str(params['firstTime']).replace('-', '年', 1)
+    params['firstTime'] = params['firstTime'].replace('-', '月', 1)+'日'
     params["firstCoin"]=str(paramsa["firstCoin"])
     params["maifeiMax"]=str(paramsa["buyAmountOfMax_Maifei"])+'$'
     params["maifeiWho"]=str(paramsa["maifeiWho"])
