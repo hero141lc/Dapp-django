@@ -62,6 +62,12 @@ def result(request):
         context_result['firstTime'] = str(context_result['firstTime']).replace('-', '年', 1)
         context_result['firstTime'] = context_result['firstTime'].replace('-', '月', 1)+'日'
     #print(context)
+    context['maxName']=context['maxName'].encode("utf-8").decode("latin1")
+    context['minName']=context['minName'].encode("utf-8").decode("latin1")
+    context['firstCoin']=context['firstCoin'].encode("utf-8").decode("latin1")
+    context['maifeiWho']=context['maifeiWho'].encode("utf-8").decode("latin1")
+    context['piXiuName']=context['piXiuName'].encode("utf-8").decode("latin1")
+
     response =render(request, 'app/result.html',context_result)
     response.set_cookie('context', str(context), max_age= 60*5, expires=None,domain=None, secure=False, httponly=False, samesite=None)
     print()
