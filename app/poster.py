@@ -37,7 +37,7 @@ class posterapi():
             f.write(response.content)
 
 def win(paramsa):
-    api = posterapi('http://poster.brickcn.xyz:5000/', 'ApfrIzxCoK1DwNZOEJCwlrnv6QZ0PCdv')
+    api = posterapi('http://poster.brickcn.xyz/', 'ApfrIzxCoK1DwNZOEJCwlrnv6QZ0PCdv')
     paramsa = eval(paramsa['context'])
     #str(paramsa['times'])
     #params["profits"]=str(paramsa["profits"])
@@ -60,7 +60,7 @@ def win(paramsa):
     return url+'.jpg'
     #api.save()
 def lose(paramsa):
-    api = posterapi('http://poster.brickcn.xyz:5000/', 'ApfrIzxCoK1DwNZOEJCwlrnv6QZ0PCdv')
+    api = posterapi('http://poster.brickcn.xyz/', 'ApfrIzxCoK1DwNZOEJCwlrnv6QZ0PCdv')
     paramsa = eval(paramsa['context'])
     params = {}
     params["times"]=str(paramsa["times"])
