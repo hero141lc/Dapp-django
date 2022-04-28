@@ -218,6 +218,7 @@
 
     <script>
         $(document).ready(function () {
+<<<<<<< HEAD
             var date=new Date();     //1. js获取当前时间
             var min=date.getMinutes();  //2. 获取当前分钟
             date.setMinutes(min+5);  
@@ -227,6 +228,9 @@
             var formatdate =  h + ":" + f + ":" + s;
 
             $("#te").html(formatdate);
+=======
+
+>>>>>>> a3977c4f8b7b94fcc8c42260cc57e37c2cc625de
             // 创建两个变量，一个数组中的月和日的名称
             var monthNames = ["1 月", "2 月", "3 月", "4 月", "5 月", "6 月", "7 月", "8 月", "9 月", "10 月", "11 月", "12 月"];
             var dayNames = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"]
@@ -259,7 +263,19 @@
                 $("#hours").html((hours < 10 ? "0" : "") + hours);
             }, 1000);
          
+<<<<<<< HEAD
 
+=======
+            var date=new Date();     //1. js获取当前时间
+            var min=date.getMinutes();  //2. 获取当前分钟
+            date.setMinutes(min+5);  
+            var h = date.getHours() < 10 ? ('0' + date.getHours()) : date.getHours()
+            var f = date.getMinutes() < 10 ? ('0' + date.getMinutes()) : date.getMinutes()
+            var s = date.getSeconds() < 10 ? ('0' + date.getseconds()) : date.getSeconds()
+            var formatdate =  h + ":" + f + ":" + s;
+
+            $("#te").html(formatdate);
+>>>>>>> a3977c4f8b7b94fcc8c42260cc57e37c2cc625de
     
 
         }); 
