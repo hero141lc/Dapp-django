@@ -38,11 +38,27 @@ function showBtn() {
     }
     var but=document.getElementById('sub');
     var temp=0; //0为显示
-    function hide(){
+    function wdishide(){
     //隐藏咯
         document.getElementById('loading').style="display:block";
         temp=1; //隐藏了就把状态改变了
      
+    }
+    function subCheck(){
+      var address=document.forms["addressForm"]["address"].value;
+      console.log("address",address);
+      console.log("address.length",address.length);
+      if (address.length!=42)
+      {
+        alert("钱包地址错误");
+        return false;
+      }
+      else{
+        document.getElementById('loading').style="display:block";
+        temp=1; //隐藏了就把状态改变了
+        return true;
+      }
+
     }
   </script>
 
@@ -72,13 +88,13 @@ function showBtn() {
 
 
     <img src="{% static '/app/image/1974292944.jpg' %}" class="bg"/>
-    <form action="{% url 'result' %}" method="get">
+    <form name="addressForm" id="addressForm" action="{% url 'result' %}" method="get" onsubmit="return subCheck()">
       <div class="input-group mb-3" style="padding-top: 40vh;display: flex;">
 
       </div>
       <div style="text-align: center;display: flex;justify-content: center;align-items: center;">
         <img style="position:absolute; z-index: 9999;right: 15vw;width: 45px;height: 45px;top:38% ;margin-bottom: 20px;" src="{% static '/app/image/347076388.jpg' %}"/>
-        <textarea name="address" onfocus="this.placeholder=''" onblur="this.placeholder='请输入地址，查看过去X月你亏了多少钱'" style="width: 70vw;height: 10vh;" placeholder="请输入地址，查看过去X月你亏了多少钱"  required="required"></textarea>
+        <textarea id="address" name="address" onfocus="this.placeholder=''" onblur="this.placeholder='请输入地址，查看过去X月你亏了多少钱'" style="width: 70vw;height: 10vh;" placeholder="请输入地址，查看过去X月你亏了多少钱"  required="required"></textarea>
       </div>
       <div style="margin-top: 10px;text-align: center;"><text style="color: red;">工头保证本次查询绝对安全</text></div>
       
@@ -89,7 +105,7 @@ function showBtn() {
   <div style="text-align:center">
     
     <div class="col">
-      <button id="sub" onclick="hide()" type="submit" value="Submit" type="button" class="btn btn-danger btn-lg " style="width: 70vw;background: #ED656A;box-shadow: inset 1px 2px 2px 0 rgba(255,255,255,0.39);border-radius: 49.5px;">获取账单</button>              
+      <button id="sub" onclick="dishide()" type="submit" value="Submit" type="button" class="btn btn-danger btn-lg " style="width: 70vw;background: #ED656A;box-shadow: inset 1px 2px 2px 0 rgba(255,255,255,0.39);border-radius: 49.5px;">获取账单</button>              
     </div>
     <div style="margin-top: 10px;text-align: grey;"><text style="color: grey;">brick工棚科技</text></div>
   </div>

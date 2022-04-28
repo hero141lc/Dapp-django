@@ -20,6 +20,9 @@ import random
 from concurrent.futures import ThreadPoolExecutor
 
 
+
+#Mysql utf-8
+
 MAX_TRANSACTION_COUNT = 300
 
 pancakeAddr='0x10ed43c718714eb63d5aa57b78b54704e256024e'
@@ -527,16 +530,16 @@ def createContext(address,contextKey,data):
         winne=1
     else:
         winne=0
-    if abs(int(profits))>5000000:
-        profits=(random.randint(1000000,2000000))
-    if abs(int(profitsMin))>2000000:
-        profitsMin=(random.randint(100000,300000))
-    if abs(int(profitsMax))>2000000:
+    if abs(int(profits))>200000:
+        profits=(random.randint(150000,200000))
+    if abs(int(profitsMin))>200000:
+        profitsMin=(random.randint(100000,150000))
+    if abs(int(profitsMax))>200000:
         profitsMax=(random.randint(100000,300000))
-    if abs(int(maifeiAll))>5000000:
-        maifeiAll=(random.randint(1000000,2000000))
-    if abs(int(maifeiPeak))>2000000:
-        maifeiPeak=(random.randint(100000,300000))
+    if abs(int(maifeiAll))>1000000:
+        maifeiAll=(random.randint(500000,1000000))
+    if abs(int(maifeiPeak))>500000:
+        maifeiPeak=(random.randint(100000,500000))
 
     brickDays=int(profits/32)
     context={
