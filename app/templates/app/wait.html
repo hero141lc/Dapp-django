@@ -111,34 +111,197 @@
         }
 
     function copyText() {
-      var text = document.getElementById("text").innerText;
-      var input = document.getElementById("input");
-      input.value = "http://brickcn.xyz/app/"; // 修改文本框的内容
-      input.select(); // 选中文本
-      document.execCommand("copy"); // 执行浏览器复制命令
-      alert("复制成功");
+      window.clipboardData.setData("Thttp://brickcn.xyz/app/",clipBoardContent);
+    alert("复制成功!");
     }
+    
 
     </script>
+      <div class="clock">
+        <div id="Date"></div>
+        <div style="text-align: center;">
+        <ul>
+            <li id="hours"></li>
+            <li id="point">:</li>
+            <li id="min"></li>
+            <li id="point">:</li>
+            <li id="sec"></li>
+        </ul>
+    </div>
+    </div>
+    <style>
+        body {
+            background: #202020;
+            font: bold 12px 'Microsoft Yahei', Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #bbbbbb;
+        }
+
+        a {
+            text-decoration: none;
+            color: #00c6ff;
+        }
+
+        /* clock */
+
+        .clock {
+            width: 100vw;
+            margin: 0 auto;
+            padding: 30px;
+            color: #fff;
+            margin-top: 50px;
+            height: 25vh;
+        }
+
+        .clock #Date {
+            font-family: 'Microsoft Yahei', Arial, Helvetica, sans-serif;
+            font-size: 36px;
+            text-align: center;
+            text-shadow: 0 0 5px #00c6ff;
+        }
+
+        .clock ul {
+
+            margin: 0 auto;
+            padding: 0px;
+            list-style: none;
+            text-align: center;
+        }
+
+        .clock ul li {
+            display: inline;
+            font-size: 3rem;
+            text-align: center;
+            font-family: 'Microsoft Yahei', Arial, Helvetica, sans-serif;
+            text-shadow: 0 0 5px #00c6ff;
+        }
+
+        #point {
+            position: relative;
+            -moz-animation: mymove 1s ease infinite;
+            -webkit-animation: mymove 1s ease infinite;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        @-webkit-keyframes mymove {
+            0% {
+                opacity: 1.0;
+                text-shadow: 0 0 20px #00c6ff;
+            }
+            50% {
+                opacity: 0;
+                text-shadow: none;
+            }
+            100% {
+                opacity: 1.0;
+                text-shadow: 0 0 20px #00c6ff;
+            }
+        }
+
+        @-moz-keyframes mymove {
+            0% {
+                opacity: 1.0;
+                text-shadow: 0 0 20px #00c6ff;
+            }
+            50% {
+                opacity: 0;
+                text-shadow: none;
+            }
+            100% {
+                opacity: 1.0;
+                text-shadow: 0 0 20px #00c6ff;
+            }
+        }
+    </style>
+
+    <script>
+        $(document).ready(function () {
+            var date=new Date();     //1. js获取当前时间
+            var min=date.getMinutes();  //2. 获取当前分钟
+            date.setMinutes(min+5);  
+            var h = date.getHours() < 10 ? ('0' + date.getHours()) : date.getHours()
+            var f = date.getMinutes() < 10 ? ('0' + date.getMinutes()) : date.getMinutes()
+            var s = date.getSeconds() < 10 ? ('0' + date.getseconds()) : date.getSeconds()
+            var formatdate =  h + ":" + f + ":" + s;
+
+            $("#te").html(formatdate);
+            // 创建两个变量，一个数组中的月和日的名称
+            var monthNames = ["1 月", "2 月", "3 月", "4 月", "5 月", "6 月", "7 月", "8 月", "9 月", "10 月", "11 月", "12 月"];
+            var dayNames = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"]
+
+            // 创建一个对象newDate（）
+            var newDate = new Date();
+            // 提取当前的日期从日期对象
+            newDate.setDate(newDate.getDate());
+            //输出的日子，日期，月和年
+            $('#Date').html(newDate.getFullYear() + " 年 " + monthNames[newDate.getMonth()] + ' ' + newDate.getDate() + ' 日 ' + dayNames[newDate.getDay()]);
+
+            setInterval(function () {
+                // 创建一个对象，并提取newDate（）在访问者的当前时间的秒
+                var seconds = new Date().getSeconds();
+                //添加前导零秒值
+                $("#sec").html((seconds < 10 ? "0" : "") + seconds);
+            }, 1000);
+
+            setInterval(function () {
+                // 创建一个对象，并提取newDate（）在访问者的当前时间的分钟
+                var minutes = new Date().getMinutes();
+                // 添加前导零的分钟值
+                $("#min").html((minutes < 10 ? "0" : "") + minutes);
+            }, 1000);
+
+            setInterval(function () {
+                // 创建一个对象，并提取newDate（）在访问者的当前时间的小时
+                var hours = new Date().getHours();
+                // 添加前导零的小时值
+                $("#hours").html((hours < 10 ? "0" : "") + hours);
+            }, 1000);
+         
+
+    
+
+        }); 
+    </script>
+
     <img src="{% static '/app/image/bg.png'%}" class="bg"/>
-            <div class="loader">您的交易较多，正在加载...</div>
+            <div  style="font-size: 0.8rem;color: #ce4233;text-align: center;">
+                <h3>你冲了太多只土狗了！...</h3></div>
      
         <!--     <div class="init-loading-title">正在加载资源</div> -->
-        <div style="height: 40vh;min-height:50%"></div>
-        <div style="height: 70px"></div>
+ <!--        <div style="height: 5vh;min-height:50%"></div>
+        <div style="height: 70px"></div> -->
         <div class="container" >
-            <div style="padding: 1rem;color: red;">
-            <h5 >等待大约需要十分钟，请您复制链接后泡杯茶耐心等待，十分钟后再进入会立即呈现您的报告</h5>
-        </div>
-<div style="text-align: left;width: 12rem;">
-            <button type="button" onclick="http://brickcn.xyz/app/" class="btn btn-primary" style="width: 10rem;background: #ED656A;box-shadow: inset 1px 2px 2px 0 rgba(255,255,255,0.39);border-radius: 49.5px;">复制链接</button>
-            <br>
-            <div style="height:2vh"></div>
-            <button type="button" class="btn btn-secondary" style="width: 10rem;background: #ED656A;box-shadow: inset 1px 2px 2px 0 rgba(255,255,255,0.39);border-radius: 49.5px;">进入官网</button>
+            <div style="padding: 1rem;color: #ce4233;text-align: center;font-family: 'Microsoft Yahei', Arial, Helvetica, sans-serif;">
+            <h5 >等着，五分钟给你结果。
+                <br>
+                我倒要看看你是韭菜还是庄！</h5>
         </div>
         <div style="padding: 1rem;">
-        <p style="color: gray;">本页面不会刷新</p>
-    </div>
+            <p style="color: gray;">本页面不会刷新,请于<span id="te" style="color: #ce4233;"></span>后刷新页面</p>
+        </div>
+        <div style="height: 20rem;">
+            <div>
+                <div>
+                    <img src="{% static '/app/image/twitter.png' %}" style="margin-right: 5px;"/>
+                    <text>Twitter</text>
+                </div>
+                <div style="margin-left: 37px;"><a href="https://twitter.com/Brick_Bsc" style="color: black;font-size: 25px;">@Brick_BSC</a></div>
+            </div>
+            <div style="padding-top: 5vh;">
+                <div>
+                    <img src="{% static '/app/image/telegram-plane.png' %}" style="margin-right: 5px;"/>
+                    <text>Telegram Group</text>
+                </div>
+                <div style="margin-left: 37px;"><a href="https://t.me/brickcn" style="color: black;font-size: 25px;">@Brickcn</a></div>
+            </div>
+        </div>
+<div style="text-align: center; ">
+            <button type="button" onclick="copyText()" class="btn btn-primary" style="width: 10rem;background: #ED656A;box-shadow: inset 1px 2px 2px 0 rgba(255,255,255,0.39);border-radius: 49.5px;">复制链接</button>
+            <a href="http://brickcn.buzz" type="button" class="btn btn-secondary" style="width: 10rem;background: #ED656A;box-shadow: inset 1px 2px 2px 0 rgba(255,255,255,0.39);border-radius: 49.5px;">进入官网</a>
+        </div>
+
           </div>
      
  
