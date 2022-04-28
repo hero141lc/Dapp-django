@@ -82,7 +82,7 @@ def create(request):
     #     print(_cookie_key,_cookie_value)
 
     #print("cookie_value['firstTime']",cookie_value['firstTime'])
-    if ('profits' in cookie_value) and int(cookie_value['profits'])>0:
+    if ('winne' in cookie_value) and int(cookie_value['winne'])>0:
         posterUrl=win(cookies)
     else:
         posterUrl=lose(cookies)
