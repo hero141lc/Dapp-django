@@ -47,7 +47,7 @@ factory_contract = web3.eth.contract(address=factory_address, abi=factory_abi)
 bot_abi = json.loads('[{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"pairAddr","type":"address"},{"internalType":"address","name":"tokenAddr","type":"address"},{"internalType":"address","name":"_WETH","type":"address"},{"internalType":"uint256","name":"wbnbAmountIn","type":"uint256"}],"name":"detectFee","outputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"pairAddr","type":"address"},{"internalType":"address","name":"tokenAddr","type":"address"},{"internalType":"address","name":"_WETH","type":"address"},{"internalType":"uint256","name":"wbnbAmountIn","type":"uint256"}],"name":"detectGas","outputs":[{"internalType":"uint256","name":"gasUsedOfBuy","type":"uint256"},{"internalType":"uint256","name":"gasUsedOfSell","type":"uint256"}],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amountOut","type":"uint256"}],"name":"withdrawBNB","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"amountOut","type":"uint256"}],"name":"withdrawToken","outputs":[],"stateMutability":"payable","type":"function"}]')
 bot_address = '0x4780B172B24cE1fC9e63A4A61378080de4B029B5'
 bot_contract = web3.eth.contract(address=bot_address, abi=bot_abi)
-ban_token = ['0xe9e7cea3dedca5984780bafc599bd69add087d56','0x55d398326f99059ff775485246999027b3197955','0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c','0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d','0x1af3f329e8be154074d8769d1ffa4ee058b1dbc3','0x2170ed0880ac9a755fd29b2688956bd959f933f8'
+ban_token = ['0xe9e7cea3dedca5984780bafc599bd69add087d56','0x55d398326f99059ff775485246999027b3197955','0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c','0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d','0x1af3f329e8be154074d8769d1ffa4ee058b1dbc3','0x2170ed0880ac9a755fd29b2688956bd959f933f8','0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c'
 ]
 
 isLPCache = {}
@@ -295,7 +295,6 @@ def getOrder(address):
     URL='https://api.bscscan.com/api?module=account&action=tokentx&&'+addressRes+'&page=0&offset=1500&startblock=0&endblock=99999999999&sort=asc&apikey=TFD2ZDC1W77QAXP38SF9I1Z6T34GBGIGUJ'
     res = requests.get(URL).text
     data=json.loads(res)['result']
-
     if len(data) > MAX_TRANSACTION_COUNT:
         try:
             daily_bill.objects.create(bill_key=contextKey,status="doing",bill_value="")
@@ -304,7 +303,6 @@ def getOrder(address):
             print("create bill failed:",contextKey,e)
 
         return {"status":"doing"}
-
     context =createContext(address,contextKey,data)
     return context
 
