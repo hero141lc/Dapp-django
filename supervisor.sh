@@ -1,0 +1,1 @@
+apt-get install supervisor&&mkdir /etc/supervisor.d/&&cp DappDjango.conf /etc/supervisor/conf.d/&&supervisorctl update&&supervisorctl restart DappDjango

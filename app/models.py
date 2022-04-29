@@ -45,7 +45,14 @@ class Trans(models.Model):
     Token=models.ForeignKey(Token, on_delete=models.CASCADE)
     toAddr=models.CharField(max_length=50,unique=True)
     value = models.IntegerField(default=0,null=True, blank=True)
- 
+class pair_info(models.Model):
+    factory_addr=models.CharField(max_length=128,db_index = True)
+    pair_index=models.IntegerField(default=0,null=True, blank=True,db_index = True)
+    pair_addr=models.CharField(max_length=128,db_index = True)
+    token0_addr=models.CharField(max_length=128,db_index = True)
+    token1_addr=models.CharField(max_length=128,db_index = True)
+    updated_time =models.DateTimeField(null=True,default = timezone.now)
+    created_time =models.DateTimeField(null=True,auto_now = True)
 '''
     next_update_at= models.DateTimeField(default = timezone.now)
     quote_currency= models.CharField(max_length=20,null=True, blank=True)

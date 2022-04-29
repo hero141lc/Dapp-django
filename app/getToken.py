@@ -7,7 +7,7 @@ import datetime
 
 from pylocache import LocalCache
 from sqlalchemy import false
-from .models import Token,Prices,Trans,Wallet,Lp,daily_bill
+from .models import Token,Prices,Trans,Wallet,Lp,daily_bill,pair_info
 from django.db.models import Q,Max
 from web3 import Web3
 from datetime import date
@@ -16,7 +16,7 @@ import time
 from multiprocessing.pool import ThreadPool
 import multiprocessing
 import random
-
+from django.core.paginator import Paginator,Page
 from concurrent.futures import ThreadPoolExecutor
 
 
@@ -55,6 +55,25 @@ isLPCache = {}
 billCache = LocalCache(max_size=5000000)
 
 pool = ThreadPoolExecutor(max_workers=20)
+bigLpData=[]
+# Load Lp to Ram
+def readLp():
+    global bigLpData
+    paginator = Paginator(pair_info.objects.all(),10)
+    num_pages=paginator.num_pages
+    for current_pagnum in range(num_pages):
+        posts = paginator.page(number=current_pagnum)
+        for ilpData in posts:
+            bigLpData.append(posts.__dict__)
+# add to Lp
+def addLp(data):
+    pair_info.objects.create(
+        factory_addr=data.factory_addr,
+        pair_index=data.pair_index,
+        pair_addr=data.pair_addr,
+        token0_addr=data.token0_addr,
+        token1_addr=data.token1_addr,
+    )
 
 def detectFee(pair_addr,token_addr,base_token_addr):
     return bot_contract.functions.detectFee(pair_addr,token_addr,base_token_addr,10000000000000000).call()
